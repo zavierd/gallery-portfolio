@@ -9,32 +9,34 @@ class TagFilter {
     // 创建标签筛选器
     createTagFilter(categories) {
         this.tagContainer = document.createElement('div');
-        this.tagContainer.className = 'tag-filter-vertical';
+        this.tagContainer.className = 'tag-filter';
         
         // 使用文档片段提高性能
         const fragment = document.createDocumentFragment();
         
-        // 添加鼠标滚轮事件，实现鼠标悬停在标签栏上时通过滚轮垂直滚动标签栏
+        // 添加鼠标滚轮事件 (Horizontal scroll via vertical wheel)
         this.tagContainer.addEventListener('wheel', (event) => {
-            event.preventDefault();
-            this.tagContainer.scrollTop += event.deltaY;
+            if (event.deltaY !== 0) {
+                event.preventDefault();
+                this.tagContainer.scrollLeft += event.deltaY;
+            }
         });
     
         // 辅助函数：将选中的标签滚动到中间
         const centerTagButton = (btn) => {
-            const containerHeight = this.tagContainer.clientHeight;
-            const btnOffsetTop = btn.offsetTop;
-            const btnHeight = btn.clientHeight;
-            const scrollTarget = btnOffsetTop - (containerHeight / 2) + (btnHeight / 2);
-            this.tagContainer.scrollTo({ top: scrollTarget, behavior: 'smooth' });
+            const containerWidth = this.tagContainer.clientWidth;
+            const btnOffsetLeft = btn.offsetLeft;
+            const btnWidth = btn.clientWidth;
+            const scrollTarget = btnOffsetLeft - (containerWidth / 2) + (btnWidth / 2);
+            this.tagContainer.scrollTo({ left: scrollTarget, behavior: 'smooth' });
         };
     
         // 添加"全部"标签
         const allTag = document.createElement('button');
-        allTag.className = 'tag';
+        allTag.className = 'tag active'; // Default active
         allTag.textContent = 'All';
-        allTag.style.backgroundColor = '#4CAF50'; // 绿色主题色
-        allTag.style.color = '#fff';
+        allTag.dataset.value = 'all';
+        
         allTag.addEventListener('click', () => {
             this.selectTag(allTag, 'all');
             centerTagButton(allTag);
@@ -51,6 +53,8 @@ class TagFilter {
             const tagButton = document.createElement('button');
             tagButton.className = 'tag';
             tagButton.textContent = category;
+            tagButton.dataset.value = category;
+            
             tagButton.addEventListener('click', () => {
                 this.selectTag(tagButton, category);
                 centerTagButton(tagButton);
@@ -63,37 +67,21 @@ class TagFilter {
     
         // 插入到gallery之前
         const gallery = document.querySelector('.gallery');
-        gallery.parentNode.insertBefore(this.tagContainer, gallery);
-    
-        // 利用 IntersectionObserver 监听各个标签按钮是否完全可见
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                // 如果标签没有完全展示，则降低透明度，实现"淡化"效果
-                if (entry.intersectionRatio < 1) {
-                    entry.target.style.opacity = '0.6';
-                } else {
-                    entry.target.style.opacity = '1';
-                }
-            });
-        }, { root: this.tagContainer, threshold: 1.0 });
-    
-        // 对所有的标签按钮进行观察
-        this.tagContainer.querySelectorAll('.tag').forEach(tagButton => {
-            observer.observe(tagButton);
-        });
+        if (gallery && gallery.parentNode) {
+            gallery.parentNode.insertBefore(this.tagContainer, gallery);
+        } else {
+            document.body.appendChild(this.tagContainer);
+        }
     }
 
     // 选择标签
     selectTag(selectedButton, tag) {
         // 移除所有标签的选中样式
-        this.tagContainer.querySelectorAll('.tag').forEach(t => {
-            t.style.backgroundColor = '';
-            t.style.color = '';
-        });
+        const buttons = this.tagContainer.querySelectorAll('.tag');
+        buttons.forEach(t => t.classList.remove('active'));
         
         // 设置当前标签的选中样式
-        selectedButton.style.backgroundColor = '#4CAF50';
-        selectedButton.style.color = '#fff';
+        selectedButton.classList.add('active');
         
         this.currentTag = tag;
         this.onTagSelect(tag);
@@ -113,14 +101,15 @@ class TagFilter {
         
         const tagButtons = this.tagContainer.querySelectorAll('.tag');
         for (const button of tagButtons) {
-            if (button.textContent.toLowerCase() === tagValue.toLowerCase()) {
+            if (button.dataset.value === tagValue || button.textContent === tagValue) {
                 this.selectTag(button, tagValue);
-                // 将选中的标签滚动到中间
-                const containerHeight = this.tagContainer.clientHeight;
-                const btnOffsetTop = button.offsetTop;
-                const btnHeight = button.clientHeight;
-                const scrollTarget = btnOffsetTop - (containerHeight / 2) + (btnHeight / 2);
-                this.tagContainer.scrollTo({ top: scrollTarget, behavior: 'smooth' });
+                
+                // Center the button
+                const containerWidth = this.tagContainer.clientWidth;
+                const btnOffsetLeft = button.offsetLeft;
+                const btnWidth = button.clientWidth;
+                const scrollTarget = btnOffsetLeft - (containerWidth / 2) + (btnWidth / 2);
+                this.tagContainer.scrollTo({ left: scrollTarget, behavior: 'smooth' });
                 break;
             }
         }
@@ -135,4 +124,4 @@ class TagFilter {
 }
 
 // 导出为全局变量
-window.TagFilter = TagFilter; 
+window.TagFilter = TagFilter;

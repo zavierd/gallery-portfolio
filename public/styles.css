@@ -1,461 +1,192 @@
 /* Layout styles */
+:root {
+  /* Light Theme - Minimalist/Commercial */
+  --primary-color: #18181b; /* Zinc 900 */
+  --primary-hover: #27272a;
+  --bg-color: #ffffff;
+  --text-color: #18181b;
+  --text-secondary: #71717a;
+  --shadow-color: rgba(0, 0, 0, 0.05);
+  --border-color: #e4e4e7;
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.5);
+}
+
+/* Dark Theme */
+body.dark {
+  --primary-color: #ffffff;
+  --primary-hover: #e4e4e7;
+  --bg-color: #09090b; /* Zinc 950 */
+  --text-color: #f4f4f5; /* Zinc 100 */
+  --text-secondary: #a1a1aa;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --border-color: #27272a;
+  --glass-bg: rgba(9, 9, 11, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
 body {
-  font-family: "Roboto", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 0;
   padding: 0;
   background-color: var(--bg-color);
-  transition: background-color 0.3s, color 0.3s;
-  min-height: 100vh; /* Ensures footer is at the bottom */
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); /* iOS Safari */
-  -webkit-touch-callout: none; /* Disable callout, image save panel (iOS Safari) */
-  user-select: none; /* Disable text selection */
-  -ms-touch-action: manipulation; /* IE 10 */
-  touch-action: manipulation; /* Non-prefixed version, currently supported by Chrome, Edge, and Firefox */
   color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
 header {
   width: 100%;
-  background-color: var(--primary-color);
-  color: white;
-  padding: 15px 20px;
+  background-color: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--text-color);
+  padding: 16px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: fixed;
   top: 0;
   left: 0;
-  box-shadow: 0 2px 4px var(--shadow-color);
+  border-bottom: 1px solid var(--border-color);
   z-index: 1000;
-  transition: transform 0.3s ease-in-out, height 0.3s ease-in-out,
-    padding 0.3s ease-in-out;
+  transition: transform 0.3s ease;
 }
 
 header h1 {
   margin: 0;
-  font-size: 2em;
-  transition: font-size 0.3s ease-in-out;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+header a {
+  color: var(--text-color);
+  text-decoration: none;
 }
 
 .header-buttons {
   display: flex;
   align-items: center;
-  align-items: baseline;
-  transition: font-size 0.3s ease-in-out;
-}
-
-header a {
-  color: white;
-  font-size: 1.5em;
-  margin-right: 20px;
-  text-decoration: none;
-  transition: font-size 0.3s ease-in-out;
+  gap: 16px;
 }
 
 header button {
   background: none;
   border: none;
-  color: white;
+  color: var(--text-color);
   cursor: pointer;
-  transition: font-size 0.3s ease-in-out;
-  display: flex;
+  padding: 4px;
+  border-radius: 4px;
+  transition: opacity 0.2s;
 }
 
-header button img {
-  width: 26px;
-  height: 26px;
-  transition: font-size 0.3s ease-in-out;
-  margin-right: 0.1em;
+header button:hover {
+  opacity: 0.7;
 }
 
-header a img {
-  width: 26px;
-  height: 26px;
-  transition: font-size 0.3s ease-in-out;
-  margin-right: 0.1em;
+/* Icons */
+header button img, header a img {
+  width: 20px;
+  height: 20px;
+  display: block;
 }
 
+/* Footer */
 footer {
   width: 100%;
-  background-color: var(--primary-color);
-  color: white;
+  padding: 24px 0;
+  margin-top: auto;
   text-align: center;
-  padding: 10px 0;
-  margin-top: auto; /* Pushes footer to the bottom */
-  opacity: 0; /* Start hidden */
-  transition: opacity 1s; /* Fade-in effect */
+  color: var(--text-secondary);
+  font-size: 13px;
+  opacity: 0;
+  animation: fadeIn 1s forwards;
 }
 
-footer a {
-  color: white;
-  text-decoration: none;
-}
+@keyframes fadeIn { to { opacity: 1; } }
 
+/* Load More Button */
 .load-more {
-  padding: 10px 20px;
-  margin: 20px 0;
+  padding: 12px 32px;
+  margin: 40px 0;
   background-color: var(--primary-color);
-  color: white;
+  color: var(--bg-color); /* Inverted for contrast */
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s, opacity 1s; /* Fade-in effect for the button */
-  opacity: 0; /* Start hidden */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.load-more.loading {
-  background-color: #a0a0a0; /* 灰色 */
-  cursor: not-allowed;
-}
-
-.load-more.loading::after {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  content: "";
-  border: 2px solid #fff;
-  border-top: 2px solid transparent;
-  border-radius: 50%;
-  width: 16px;
-  height: 16px;
-  margin-left: 10px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* Dark theme styles */
-body.dark {
-  background-color: #2d2d2d;
-  color: #e0e0e0;
-  --primary-color: #3d3d3d;
-  --text-color: #e0e0e0;
-  --bg-color: #121212;
-  --shadow-color: rgba(0, 0, 0, 0.6);
-}
-
-body.dark header,
-body.dark footer {
-  background-color: #3d3d3d;
-  border-bottom: 1px solid #4d4d4d;
-}
-
-body.dark .tag-filter {
-  background-color: #3d3d3d;
-}
-
-body.dark .tag {
-  background-color: #4d4d4d;
-  color: #e0e0e0;
-}
-
-body.dark .modal {
-  background-color: rgba(61, 61, 61, 0.9);
-}
-
-body.dark .modal-content {
-  background-color: #4d4d4d;
-}
-
-body.dark #exif-info {
-  color: #e0e0e0;
-}
-
-/* 加载原图按钮样式 */
-.load-original-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 25px;
+  border-radius: 24px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
-  z-index: 1002;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  min-height: 44px;
-}
-
-.load-original-btn:hover {
-  background-color: var(--primary-color-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
-
-.load-original-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* 按钮加载状态 */
-.load-original-btn.loading {
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.load-original-btn .spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid transparent;
-  border-top: 2px solid white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  flex-shrink: 0;
-  display: block;
-}
-
-.load-original-btn span {
-  display: block;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-/* 深色主题下的按钮样式 */
-body.dark .load-original-btn {
-  background-color: var(--primary-color);
-  color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-}
-
-body.dark .load-original-btn:hover {
-  background-color: var(--primary-color-dark);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
-}
-
-/* Loading animation */
-#loading {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1001;
+  transition: transform 0.2s, opacity 0.2s;
+  opacity: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-#loading::after {
-  content: "";
-  border: 4px solid var(--primary-color);
-  border-top: 4px solid transparent;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-  will-change: transform; /* 优化动画性能 */
+.load-more:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--shadow-color);
 }
 
-#loading.hidden {
-  display: none;
+.load-more:active { transform: scale(0.98); }
+
+.load-more.loading {
+  opacity: 0.7;
+  cursor: wait;
 }
 
-@media (max-width: 600px) {
-  header {
-    height: 2.07em;
-    padding: 10px 15px;
-  }
-  header h1 {
-    font-size: 1.5em;
-  }
-  header a {
-    font-size: 24px;
-  }
-  header button {
-    margin-right: 30px;
-  }
-}
-
-@media (min-width: 600px) and (max-width: 1200px) {
-  header {
-    height: 2.085em;
-    padding: 15px 20px;
-  }
-  header h1 {
-    font-size: 1.75em;
-  }
-  header a {
-    font-size: 24px;
-  }
-  header button {
-    margin-right: 40px;
-  }
-}
-
-@media (min-width: 1200px) {
-  header {
-    height: 2.1em;
-    padding: 20px 30px;
-  }
-  header h1 {
-    font-size: 2em;
-  }
-  header a {
-    font-size: 24px;
-  }
-  header button {
-    margin-right: 50px;
-  }
-}
-
-/* 浅色模式 */
-:root {
-  --primary-color: #4CAF50; /* 统一绿色主题色 */
-  --background-color: #ffffff;
-  --text-color: #333333;
-  --header-bg: #f5f5f5;
-  --button-bg: #4CAF50; /* 统一绿色 */
-  --button-text: #ffffff;
-  --tag-bg: #4CAF50; /* 统一绿色 */
-  --tag-text: #ffffff;
-  --modal-bg: rgba(255, 255, 255, 0.9);
-  --modal-text: #333333;
-}
-
-/* 深色模式 */
-.dark {
-  --primary-color: #4CAF50; /* 保持绿色主题 */
-  --background-color: #121212;
-  --text-color: #e0e0e0;
-  --header-bg: #1e1e1e;
-  --button-bg: #4CAF50; /* 保持绿色 */
-  --button-text: #ffffff;
-  --tag-bg: #4CAF50; /* 保持绿色 */
-  --tag-text: #ffffff;
-  --modal-bg: rgba(18, 18, 18, 0.9);
-  --modal-text: #e0e0e0;
-}
-
-/* 使用变量替换原有颜色值 */
-header, footer, .load-more {
-    background-color: var(--primary-color);
-}
-
-body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-}
-
-.gallery img {
-    box-shadow: 0 4px 8px var(--shadow-color);
-}
-
-.tag-filter {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px;
-    background-color: rgba(0, 0, 0, 0.08); /* 将透明度从0.05调整为0.08 */
-    position: sticky;
-    top: 0;
-    z-index: 1;
-}
-
-/* 优化暗黑模式下垂直标签栏的背景 */
-body.dark .tag-filter-vertical {
-    background-color: rgba(255, 255, 255, 0.1); /* 使用半透明白色背景，降低突兀感 */
-    /* 可根据需要调整内边距、圆角等其他样式 */
-}
-
-/* 加载指示器样式 */
-#temp-loading-msg {
-    text-align: center;
-    margin: 20px 0;
-    padding: 10px;
-    color: #777;
-    background-color: rgba(0, 0, 0, 0.05);
-    border-radius: 5px;
-    animation: fadeInOut 1.5s infinite alternate;
-}
-
-@keyframes fadeInOut {
-    from { opacity: 0.6; }
-    to { opacity: 1; }
-}
-
-/* 适配深色模式 */
-body.dark #temp-loading-msg {
-    color: #aaa;
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-/* 通知系统样式 */
+/* Notification */
 .notification-container {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 24px;
+  right: 24px;
   z-index: 9999;
   display: flex;
-  flex-direction: column-reverse;
-  gap: 10px;
-  max-width: 300px;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .notification {
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
+  background: var(--surface);
+  color: var(--text-color);
   padding: 12px 16px;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  opacity: 0;
-  transform: translateX(50px);
-  transition: opacity 0.3s, transform 0.3s, top 0.3s;
-  position: relative;
-  word-wrap: break-word;
-  max-width: 100%;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
   font-size: 14px;
-  display: flex;
-  align-items: center;
+  border: 1px solid var(--border-color);
+  animation: slideIn 0.3s ease;
 }
 
-.notification.show {
-  opacity: 1;
-  transform: translateX(0);
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.notification.fade-out {
-  opacity: 0;
-  transform: translateY(-10px);
+/* Responsive */
+@media (max-width: 600px) {
+  header { padding: 12px 16px; }
+  header h1 { font-size: 16px; }
 }
 
-/* 带加载图标的通知 */
-.notification.with-spinner {
-  padding-left: 16px; /* 减小左侧内边距，与普通通知一致 */
+/* Load Original Button */
+.load-original-btn {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
 }
-
-.notification .spinner {
-  width: 18px;
-  height: 18px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: #fff;
-  animation: spin 1s linear infinite;
-  margin-right: 10px;
-}
-
-/* 深色模式下的通知样式 */
-body.dark .notification {
-  background-color: #1e1e1e; /* 改为不透明背景 */
-  color: #f0f0f0;
-  border: 1px solid rgba(80, 80, 80, 0.5); /* 添加边框 */
-}
+.load-original-btn:hover { background-color: rgba(255, 255, 255, 0.3); }
