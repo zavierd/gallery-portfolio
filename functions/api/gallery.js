@@ -18,7 +18,7 @@ export async function onRequestGet(context) {
     } while (cursor);
 
     // 获取 R2 公开 URL（从环境变量）
-    const baseUrl = env.R2_PUBLIC_URL || 'https://pub-948c65a2d9114e55b90d28bcb472cbb1.r2.dev';
+    const baseUrl = env.R2_PUBLIC_URL || 'https://gallery.aicc0.com';
 
     // 按分类整理图片
     for (const obj of allObjects) {
