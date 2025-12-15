@@ -34,7 +34,7 @@ class TagFilter {
         // 添加"全部"标签
         const allTag = document.createElement('button');
         allTag.className = 'tag active'; // Default active
-        allTag.textContent = 'All';
+        allTag.textContent = '全部';
         allTag.dataset.value = 'all';
         
         allTag.addEventListener('click', () => {

@@ -395,7 +395,7 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>Dashboard</h1>
+      <h1>后台管理</h1>
       <a href="/" class="back-link">查看相册 &rarr;</a>
     </div>
     
@@ -448,13 +448,13 @@
     <div id="manageTab" class="tab-content">
       <div class="filter-bar">
         <select id="categoryFilter" onchange="loadGallery()"></select>
-        <div class="count-badge" id="imageCount">0 items</div>
+        <div class="count-badge" id="imageCount">0 项</div>
         <div style="flex:1"></div>
         <button class="btn btn-small" onclick="loadGallery()">刷新列表</button>
       </div>
       
       <div class="batch-actions" id="batchActions">
-        <span id="selectedCount">Selected 0</span>
+        <span id="selectedCount">已选择 0 项</span>
         <select id="moveToCategory" style="width: 150px; padding: 6px;"></select>
         <button class="btn btn-small btn-success" onclick="moveSelected()">移动</button>
         <button class="btn btn-small btn-danger" onclick="deleteSelected()">删除</button>
@@ -511,7 +511,7 @@
         categoryIdCounter = getMaxId(categories) + 1;
       } catch (e) {
         categories = [
-          { id: '1', name: 'Default', children: [] }
+          { id: '1', name: '默认分类', children: [] }
         ];
       }
     }
@@ -572,7 +572,7 @@
 
     // 添加根分类
     function addRootCategory() {
-      categories.push({ id: String(categoryIdCounter++), name: 'New Category', children: [] });
+      categories.push({ id: String(categoryIdCounter++), name: '新分类', children: [] });
       renderCategoryTree();
     }
 
@@ -581,7 +581,7 @@
       const parent = findCategoryById(categories, parentId);
       if (parent) {
         if (!parent.children) parent.children = [];
-        parent.children.push({ id: String(categoryIdCounter++), name: 'Sub Category', children: [] });
+        parent.children.push({ id: String(categoryIdCounter++), name: '子分类', children: [] });
         renderCategoryTree();
       }
     }
@@ -620,10 +620,10 @@
       const levelClass = level === 0 ? '' : level === 1 ? 'child' : 'grandchild';
       return cats.map(cat => `
         <div class="category-item ${levelClass}">
-          <input type="text" value="${cat.name}" data-id="${cat.id}" placeholder="Category Name">
+          <input type="text" value="${cat.name}" data-id="${cat.id}" placeholder="分类名称">
           <div class="cat-actions">
-            <button class="cat-btn" onclick="addChildCategory('${cat.id}')">Add Sub</button>
-            <button class="cat-btn delete" onclick="deleteCategory('${cat.id}')">Delete</button>
+            <button class="cat-btn" onclick="addChildCategory('${cat.id}')">添加子分类</button>
+            <button class="cat-btn delete" onclick="deleteCategory('${cat.id}')">删除</button>
           </div>
         </div>
         ${cat.children?.length ? renderCategoryItems(cat.children, level + 1) : ''}
@@ -640,8 +640,8 @@
       const moveSelect = document.getElementById('moveToCategory');
       
       if(catSelect) catSelect.innerHTML = optionsHtml;
-      if(filterSelect) filterSelect.innerHTML = '<option value="">All Categories</option>' + optionsHtml;
-      if(moveSelect) moveSelect.innerHTML = '<option value="">Choose category...</option>' + optionsHtml;
+      if(filterSelect) filterSelect.innerHTML = '<option value="">所有分类</option>' + optionsHtml;
+      if(moveSelect) moveSelect.innerHTML = '<option value="">选择分类...</option>' + optionsHtml;
     }
 
     // 扁平化分类（带层级显示）
@@ -682,7 +682,7 @@
     // 加载图片库
     async function loadGallery() {
       const grid = document.getElementById('galleryGrid');
-      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">Loading...</div>';
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">加载中...</div>';
       
       try {
         const res = await fetch('/api/gallery');
@@ -698,10 +698,10 @@
           }
         }
         
-        document.getElementById('imageCount').textContent = `${galleryImages.length} items`;
+        document.getElementById('imageCount').textContent = `${galleryImages.length} 项`;
         
         if (galleryImages.length === 0) {
-          grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">No images found</div>';
+          grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#999;padding:40px;">暂无图片</div>';
           return;
         }
         
@@ -720,7 +720,7 @@
           </div>
         `).join('');
       } catch (e) {
-        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#ef4444;padding:40px;">Failed to load data</div>';
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#ef4444;padding:40px;">加载数据失败</div>';
       }
     }
 
@@ -736,7 +736,7 @@
         item.classList.toggle('selected', selectedImages.has(url));
       });
       const count = selectedImages.size;
-      document.getElementById('selectedCount').textContent = `Selected ${count}`;
+      document.getElementById('selectedCount').textContent = `已选择 ${count} 项`;
       document.getElementById('batchActions').classList.toggle('show', count > 0);
     }
 
@@ -745,7 +745,7 @@
     function closeModal() { document.getElementById('imageModal').classList.remove('show'); }
 
     async function deleteImage(key) {
-      if (!confirm('Permanently delete this image?')) return;
+      if (!confirm('确定永久删除这张图片吗？')) return;
       const parts = key.split('/');
       const category = parts[0];
       const fileName = parts[1];
@@ -754,13 +754,13 @@
       
       try {
         const res = await fetch('/api/delete', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: fullKey }) });
-        if (res.ok) { showManageMessage('Deleted successfully', 'success'); loadGallery(); }
-        else showManageMessage('Delete failed', 'error');
-      } catch (e) { showManageMessage('Delete failed: ' + e.message, 'error'); }
+        if (res.ok) { showManageMessage('删除成功', 'success'); loadGallery(); }
+        else showManageMessage('删除失败', 'error');
+      } catch (e) { showManageMessage('删除失败: ' + e.message, 'error'); }
     }
 
     async function deleteSelected() {
-      if (!confirm(`Permanently delete ${selectedImages.size} images?`)) return;
+      if (!confirm(`确定永久删除这 ${selectedImages.size} 张图片吗？`)) return;
       let success = 0, failed = 0;
       for (const url of selectedImages) {
         const img = galleryImages.find(i => i.original === url);
@@ -773,18 +773,18 @@
         } catch (e) { failed++; }
       }
       selectedImages.clear();
-      showManageMessage(`Completed: ${success} success, ${failed} failed`, failed ? 'error' : 'success');
+      showManageMessage(`完成：成功 ${success} 张，失败 ${failed} 张`, failed ? 'error' : 'success');
       loadGallery();
     }
 
     async function moveSelected() {
       const targetCategory = document.getElementById('moveToCategory').value;
       if (!targetCategory) {
-        showManageMessage('Please select a target category', 'error');
+        showManageMessage('请选择目标分类', 'error');
         return;
       }
       if (selectedImages.size === 0) {
-        showManageMessage('No images selected', 'error');
+        showManageMessage('未选择图片', 'error');
         return;
       }
 
@@ -811,7 +811,7 @@
       }
       
       selectedImages.clear();
-      showManageMessage(`Moved: ${success} success, ${failed} failed`, failed ? 'error' : 'success');
+      showManageMessage(`移动完成：成功 ${success} 张，失败 ${failed} 张`, failed ? 'error' : 'success');
       loadGallery();
     }
 
@@ -862,7 +862,7 @@
 
     function updateUploadBtn() {
       uploadBtn.disabled = selectedFiles.length === 0;
-      uploadBtn.textContent = selectedFiles.length > 0 ? `Upload ${selectedFiles.length} Images` : 'Start Upload';
+      uploadBtn.textContent = selectedFiles.length > 0 ? `上传 ${selectedFiles.length} 张图片` : '开始上传';
     }
 
     async function compressImage(file, quality = 0.8) {
@@ -897,7 +897,7 @@
 
       for (let i = 0; i < selectedFiles.length; i++) {
         let file = selectedFiles[i];
-        document.getElementById('progressText').textContent = `Uploading ${i + 1}/${selectedFiles.length}`;
+        document.getElementById('progressText').textContent = `正在上传 ${i + 1}/${selectedFiles.length}`;
         document.getElementById('progressFill').style.width = `${(i / selectedFiles.length) * 100}%`;
         
         if (shouldCompress) { try { file = await compressImage(file); } catch (e) {} }
@@ -913,10 +913,10 @@
       }
 
       document.getElementById('progressFill').style.width = '100%';
-      document.getElementById('progressText').textContent = 'Done!';
+      document.getElementById('progressText').textContent = '完成!';
       
       const msg = document.getElementById('uploadMessage');
-      msg.textContent = `Upload complete: ${uploaded} success, ${failed} failed`;
+      msg.textContent = `上传完成：成功 ${uploaded} 张，失败 ${failed} 张`;
       msg.className = `message ${failed ? 'error' : 'success'}`;
       msg.style.display = 'block';
       
