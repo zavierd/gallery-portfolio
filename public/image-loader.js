@@ -64,9 +64,14 @@ class ImageLoader {
         const width = window.innerWidth;
         let computedColumns, computedImagesPerLoad;
         
-        // 固定为单列布局
-        computedColumns = 1;
-        computedImagesPerLoad = 6;
+        // 手机端4列，电脑端8列
+        if (width < 768) {
+            computedColumns = 4;
+            computedImagesPerLoad = 16;
+        } else {
+            computedColumns = 8;
+            computedImagesPerLoad = 32;
+        }
         
         // 如果列数没有变化，仅更新加载图片数量，不重新排布
         if (computedColumns === this.columns) {
