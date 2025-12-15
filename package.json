@@ -8,6 +8,7 @@
     "build": "echo '静态网站，无需构建'",
     "dev": "echo '请使用本地服务器运行，如: npx serve .'",
     "serve": "npx serve .",
+    "upload": "node upload.js",
     "r2:generate-index": "node generate-gallery-index-r2.js",
     "r2:generate-previews": "node generate-webp-thumbnail-r2.js"
   },

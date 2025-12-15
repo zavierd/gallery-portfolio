@@ -219,14 +219,13 @@ class ImageLoader {
         // 确保gallery可见
         if (this.galleryElement.style.opacity !== '1') {
             this.galleryElement.style.opacity = '1';
-            document.querySelector('footer').style.opacity = '1';
             document.getElementById('loading').classList.add('hidden');
         }
         
         // 计算需要加载的图片数量
         const viewportHeight = window.innerHeight;
         const viewportWidth = window.innerWidth;
-        const headerHeight = document.querySelector('header').offsetHeight;
+        const headerHeight = 0;
         const availableHeight = viewportHeight - headerHeight;
         const imagesPerRow = this.columns;
         
@@ -418,7 +417,7 @@ class ImageLoader {
             tempLoadingMsg.style.margin = '20px 0';
             tempLoadingMsg.style.padding = '10px';
             tempLoadingMsg.style.color = '#777';
-            document.querySelector('footer').before(tempLoadingMsg);
+            this.galleryElement.after(tempLoadingMsg);
         }
     }
 
@@ -501,7 +500,7 @@ class ImageLoader {
             loadedMsg.style.backgroundColor = 'rgba(76, 175, 80, 0.1)';
             loadedMsg.style.borderRadius = '5px';
             loadedMsg.style.animation = 'fadeIn 1s';
-            document.querySelector('footer').before(loadedMsg);
+            this.galleryElement.after(loadedMsg);
             
             if (!document.getElementById('fadeInStyle')) {
                 const style = document.createElement('style');
@@ -591,7 +590,7 @@ class ImageLoader {
 
     // 设置gallery的margin-top
     setGalleryMarginTop() {
-        const headerHeight = document.querySelector('header').offsetHeight;
+        const headerHeight = 0;
         this.galleryElement.style.marginTop = `${headerHeight + 20}px`;
     }
 
