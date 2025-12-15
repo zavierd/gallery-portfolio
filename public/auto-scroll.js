@@ -28,10 +28,11 @@ class AutoScroll {
 
     // 创建自动滚动指示器
     createScrollIndicator() {
-        this.scrollIndicator = document.createElement('div');
-        this.scrollIndicator.className = 'auto-scroll-indicator';
-        this.scrollIndicator.textContent = '自动滚动中';
-        document.body.appendChild(this.scrollIndicator);
+        // 指示器已禁用
+        // this.scrollIndicator = document.createElement('div');
+        // this.scrollIndicator.className = 'auto-scroll-indicator';
+        // this.scrollIndicator.textContent = '自动滚动中';
+        // document.body.appendChild(this.scrollIndicator);
     }
 
     // 设置滚轮监听
@@ -92,7 +93,7 @@ class AutoScroll {
     toggleAutoScroll() {
         this.autoScrollEnabled = !this.autoScrollEnabled;
         this.scrollButton.classList.toggle('active');
-        this.scrollIndicator.classList.toggle('visible');
+        // this.scrollIndicator.classList.toggle('visible');
         
         if (this.autoScrollEnabled) {
             this.autoScrollSpeed = 1;

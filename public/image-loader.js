@@ -422,11 +422,8 @@ class ImageLoader {
         if (!document.getElementById('temp-loading-msg')) {
             const tempLoadingMsg = document.createElement('div');
             tempLoadingMsg.id = 'temp-loading-msg';
-            tempLoadingMsg.textContent = '加载中...';
-            tempLoadingMsg.style.textAlign = 'center';
-            tempLoadingMsg.style.margin = '20px 0';
-            tempLoadingMsg.style.padding = '10px';
-            tempLoadingMsg.style.color = '#777';
+            tempLoadingMsg.className = 'loading-dots';
+            tempLoadingMsg.innerHTML = '<span></span><span></span><span></span>';
             this.galleryElement.after(tempLoadingMsg);
         }
     }
@@ -501,36 +498,6 @@ class ImageLoader {
     handleAllImagesLoaded() {
         // 不显示加载完毕消息
         return;
-        if (!document.getElementById('all-loaded-message')) {
-            const loadedMsg = document.createElement('div');
-            loadedMsg.id = 'all-loaded-message';
-            loadedMsg.textContent = '————  已全部加载完毕  ————';
-            loadedMsg.style.textAlign = 'center';
-            loadedMsg.style.margin = '20px 0';
-            loadedMsg.style.padding = '10px';
-            loadedMsg.style.color = 'var(--text-color)';
-            loadedMsg.style.backgroundColor = 'rgba(76, 175, 80, 0.1)';
-            loadedMsg.style.borderRadius = '5px';
-            loadedMsg.style.animation = 'fadeIn 1s';
-            this.galleryElement.after(loadedMsg);
-            
-            if (!document.getElementById('fadeInStyle')) {
-                const style = document.createElement('style');
-                style.id = 'fadeInStyle';
-                style.textContent = `
-                    @keyframes fadeIn {
-                        from { opacity: 0; }
-                        to { opacity: 1; }
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-        }
-        
-        setTimeout(() => {
-            window.scrollBy(0, 1);
-            window.scrollBy(0, -1);
-        }, 200);
     }
 
     // 设置滚动监听
@@ -718,7 +685,6 @@ class ImageLoader {
             return `
                 <div class="loading-spinner">
                     <div class="spinner"></div>
-                    <p>加载原图中...</p>
                 </div>
             `;
         };
@@ -863,7 +829,7 @@ class ImageLoader {
         const loadOriginalBtn = document.getElementById('load-original-btn');
 
         // 在按钮上显示加载动画
-        loadOriginalBtn.innerHTML = '<div class="spinner"></div><span>加载中...</span>';
+        loadOriginalBtn.innerHTML = '<div class="spinner"></div>';
         loadOriginalBtn.classList.add('loading');
 
         // 记录图片尺寸变化
@@ -900,7 +866,6 @@ class ImageLoader {
                 exifInfo.innerHTML = `
                     <div class="loading-paused">
                         <div class="spinner-paused"></div>
-                        <p>加载中...</p>
                     </div>
                 `;
                 spinnerActive = false;
