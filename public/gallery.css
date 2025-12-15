@@ -2,9 +2,9 @@
 .gallery {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px; /* Increased gap for cleaner look */
+  gap: 12px;
   width: 100%;
-  max-width: 1600px;
+  max-width: 1800px; /* Increased max-width for 8 columns */
   margin: 0 auto;
   padding: 20px;
   opacity: 0;
@@ -15,17 +15,17 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 /* Images */
 .gallery img {
   width: 100%;
   display: block;
-  border-radius: 4px; /* Slightly sharper corners */
+  border-radius: 4px;
   transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.3s;
   cursor: zoom-in;
-  background-color: var(--border-color); /* Placeholder color */
+  background-color: var(--border-color);
   opacity: 0;
 }
 
@@ -37,14 +37,15 @@
   transform: scale(1.02);
 }
 
-/* Tag Filter - Minimalist & Horizontal */
+/* Tag Filter - Optimized */
 .tag-filter {
   position: sticky;
-  top: 60px; /* Adjust based on header height */
+  top: 53px; /* Match header height */
   z-index: 900;
   width: 100%;
   display: flex;
-  gap: 8px;
+  justify-content: center;
+  gap: 10px;
   padding: 12px 20px;
   overflow-x: auto;
   white-space: nowrap;
@@ -56,6 +57,7 @@
   /* Hide Scrollbar */
   scrollbar-width: none;
   -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .tag-filter::-webkit-scrollbar {
@@ -63,27 +65,28 @@
 }
 
 .tag {
-  padding: 6px 16px;
+  padding: 8px 18px; /* Larger touch target */
   border-radius: 100px;
-  border: 1px solid var(--border-color);
-  background: transparent;
+  border: 1px solid transparent;
+  background: var(--surface); /* Slightly distinct background */
   color: var(--text-secondary);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   flex-shrink: 0;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05); /* Subtle depth */
 }
 
 .tag:hover {
-  border-color: var(--text-color);
   color: var(--text-color);
+  background: var(--bg-color);
 }
 
 .tag.active {
-  background: var(--text-color); /* Black in light mode, White in dark */
-  color: var(--bg-color); /* Inverted */
-  border-color: var(--text-color);
+  background: var(--text-color);
+  color: var(--bg-color);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 /* Modal */
@@ -92,7 +95,7 @@
   position: fixed;
   inset: 0;
   z-index: 2000;
-  background-color: rgba(0, 0, 0, 0.95); /* Darker, more immersive */
+  background-color: rgba(0, 0, 0, 0.95);
   backdrop-filter: blur(5px);
   overflow: hidden;
   opacity: 0;
@@ -201,7 +204,22 @@
 
 /* Mobile Tweaks */
 @media (max-width: 768px) {
-  .gallery { gap: 8px; padding: 10px; }
-  .gallery .column { gap: 8px; }
-  .tag-filter { top: 56px; } /* Adjust for mobile header */
+  .gallery { 
+    gap: 4px; /* Tighter gap for mobile 4-col */
+    padding: 8px; /* Less padding */
+  }
+  .gallery .column { 
+    gap: 4px; 
+  }
+  
+  .tag-filter {
+    top: 50px;
+    justify-content: flex-start; /* Left align on mobile for scrolling */
+    padding: 10px 16px;
+  }
+  
+  .tag {
+    padding: 6px 14px;
+    font-size: 13px;
+  }
 }
