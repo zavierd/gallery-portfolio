@@ -61,9 +61,9 @@ class TagFilter {
         // 一次性添加所有标签
         this.tagContainer.appendChild(fragment);
     
-        // 插入到header和gallery之间
-        const header = document.querySelector('header');
-        header.insertAdjacentElement('afterend', this.tagContainer);
+        // 插入到gallery之前
+        const gallery = document.querySelector('.gallery');
+        gallery.parentNode.insertBefore(this.tagContainer, gallery);
     
         // 利用 IntersectionObserver 监听各个标签按钮是否完全可见
         const observer = new IntersectionObserver((entries) => {
