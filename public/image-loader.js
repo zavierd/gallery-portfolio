@@ -9,6 +9,7 @@ class ImageLoader {
         this.imagesLoadedCount = 0;
         this.loadingImagesCount = 0;
         this.columnElements = [];
+        this.columnHeights = []; // Track virtual heights based on aspect ratio
         this.currentTag = 'all';
         this.isScrollLoading = false;
         this.scrollThrottleTimer = null;
@@ -37,22 +38,24 @@ class ImageLoader {
             }
         });
         this.columnElements = [];
+        this.columnHeights = []; // 重置虚拟高度追踪
         
         for (let i = 0; i < this.columns; i++) {
             const column = document.createElement('div');
             column.classList.add('column');
             this.columnElements.push(column);
             this.galleryElement.appendChild(column);
+            this.columnHeights.push(0); // 初始化高度为0
         }
     }
 
     // 获取最短列的索引
     getShortestColumn() {
         let minIndex = 0;
-        let minHeight = this.columnElements[0].offsetHeight;
+        let minHeight = this.columnHeights[0]; // 使用虚拟高度
         for (let i = 1; i < this.columnElements.length; i++) {
-            if (this.columnElements[i].offsetHeight < minHeight) {
-                minHeight = this.columnElements[i].offsetHeight;
+            if (this.columnHeights[i] < minHeight) {
+                minHeight = this.columnHeights[i];
                 minIndex = i;
             }
         }
@@ -160,6 +163,14 @@ class ImageLoader {
             // 将图片添加到最短的列
             const shortestColumnIndex = this.getShortestColumn();
             this.columnElements[shortestColumnIndex].appendChild(img);
+            
+            // 更新虚拟高度 (假设宽度归一化为1，高度即为宽高比)
+            const aspectRatio = img.naturalHeight / img.naturalWidth;
+            if (!isNaN(aspectRatio)) {
+                this.columnHeights[shortestColumnIndex] += aspectRatio;
+            } else {
+                this.columnHeights[shortestColumnIndex] += 1; // 默认正方形
+            }
         }
     }
 
@@ -332,6 +343,14 @@ class ImageLoader {
                     // 添加到最短列
                     const shortestColumnIndex = this.getShortestColumn();
                     this.columnElements[shortestColumnIndex].appendChild(img);
+                    
+                    // 更新虚拟高度 (基于宽高比)
+                    const aspectRatio = img.naturalHeight / img.naturalWidth;
+                    if (!isNaN(aspectRatio)) {
+                        this.columnHeights[shortestColumnIndex] += aspectRatio;
+                    } else {
+                        this.columnHeights[shortestColumnIndex] += 1;
+                    }
                     
                     // 设置加载动画
                     setTimeout(() => {
