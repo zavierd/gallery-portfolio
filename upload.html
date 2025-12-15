@@ -20,18 +20,11 @@
       padding: 30px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     }
-    h1, h2 {
-      color: #333;
-      margin-bottom: 20px;
-    }
+    h1, h2 { color: #333; margin-bottom: 20px; }
     h1 { text-align: center; font-size: 24px; }
-    h2 { font-size: 18px; border-bottom: 2px solid #667eea; padding-bottom: 10px; margin-top: 30px; }
+    h2 { font-size: 16px; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-top: 20px; }
     
-    .tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
+    .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
     .tab {
       padding: 10px 20px;
       border: none;
@@ -41,10 +34,7 @@
       font-size: 14px;
       transition: all 0.3s;
     }
-    .tab.active {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-    }
+    .tab.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
     
@@ -57,64 +47,24 @@
       transition: all 0.3s;
       margin-bottom: 20px;
     }
-    .upload-area:hover, .upload-area.dragover {
-      border-color: #667eea;
-      background: #f8f9ff;
-    }
+    .upload-area:hover, .upload-area.dragover { border-color: #667eea; background: #f8f9ff; }
     .upload-area .icon { font-size: 48px; margin-bottom: 10px; }
     
     .form-group { margin-bottom: 15px; }
     label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
-      font-size: 14px;
-    }
+    input, select { width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; }
     input:focus, select:focus { outline: none; border-color: #667eea; }
     
-    .preview-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    .preview-item {
-      position: relative;
-      aspect-ratio: 1;
-      border-radius: 8px;
-      overflow: hidden;
-    }
+    .preview-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-bottom: 20px; }
+    .preview-item { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; }
     .preview-item img { width: 100%; height: 100%; object-fit: cover; }
-    .preview-item .remove {
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      background: rgba(255,0,0,0.8);
-      color: white;
-      border: none;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 12px;
-    }
+    .preview-item .remove { position: absolute; top: 4px; right: 4px; background: rgba(255,0,0,0.8); color: white; border: none; width: 20px; height: 20px; border-radius: 50%; cursor: pointer; font-size: 12px; }
     
-    .btn {
-      padding: 12px 24px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
+    .btn { padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: transform 0.2s; }
     .btn:hover:not(:disabled) { transform: translateY(-2px); }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; }
     .btn-danger { background: linear-gradient(135deg, #e53935 0%, #c62828 100%); }
+    .btn-success { background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%); }
     .btn-small { padding: 6px 12px; font-size: 12px; }
     
     .checkbox-group { display: flex; align-items: center; gap: 8px; }
@@ -130,115 +80,43 @@
     .message.success { background: #d4edda; color: #155724; display: block; }
     .message.error { background: #f8d7da; color: #721c24; display: block; }
     
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 15px;
-      margin-top: 20px;
-    }
-    .gallery-item {
-      position: relative;
-      aspect-ratio: 1;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; margin-top: 20px; }
+    .gallery-item { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.2s; }
     .gallery-item:hover { transform: scale(1.02); }
     .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
-    .gallery-item .overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: linear-gradient(transparent, rgba(0,0,0,0.8));
-      color: white;
-      padding: 30px 8px 8px;
-      font-size: 11px;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
+    .gallery-item .overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; padding: 30px 8px 8px; font-size: 11px; opacity: 0; transition: opacity 0.3s; }
     .gallery-item:hover .overlay { opacity: 1; }
-    .gallery-item .actions {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      display: flex;
-      gap: 5px;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
+    .gallery-item .actions { position: absolute; top: 8px; right: 8px; display: flex; gap: 5px; opacity: 0; transition: opacity 0.3s; }
     .gallery-item:hover .actions { opacity: 1; }
-    .gallery-item .actions button {
-      width: 28px;
-      height: 28px;
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+    .gallery-item .actions button { width: 28px; height: 28px; border: none; border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
     .gallery-item .actions .delete-btn { background: rgba(255,0,0,0.9); color: white; }
     .gallery-item.selected { outline: 3px solid #667eea; }
     
-    .filter-bar {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-bottom: 15px;
-    }
+    .filter-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 15px; }
     .filter-bar select { width: auto; min-width: 150px; }
     .filter-bar .count { color: #666; font-size: 14px; }
     
-    .batch-actions {
-      display: none;
-      gap: 10px;
-      margin-bottom: 15px;
-      padding: 10px;
-      background: #f5f5f5;
-      border-radius: 8px;
-      align-items: center;
-    }
+    .batch-actions { display: none; gap: 10px; margin-bottom: 15px; padding: 10px; background: #f5f5f5; border-radius: 8px; align-items: center; }
     .batch-actions.show { display: flex; }
     
-    .back-link {
-      display: block;
-      text-align: center;
-      margin-top: 20px;
-      color: #667eea;
-      text-decoration: none;
-    }
+    .back-link { display: block; text-align: center; margin-top: 20px; color: #667eea; text-decoration: none; }
     
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.8);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-    }
+    .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
     .modal.show { display: flex; }
-    .modal img {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 8px;
-    }
-    .modal .close {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      color: white;
-      font-size: 30px;
-      cursor: pointer;
-    }
+    .modal img { max-width: 90%; max-height: 90%; border-radius: 8px; }
+    .modal .close { position: absolute; top: 20px; right: 20px; color: white; font-size: 30px; cursor: pointer; }
+    
+    /* 分类管理样式 */
+    .category-tree { margin: 15px 0; }
+    .category-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #f5f5f5; border-radius: 6px; margin-bottom: 8px; }
+    .category-item.child { margin-left: 25px; background: #fafafa; }
+    .category-item.grandchild { margin-left: 50px; background: #fff; border: 1px solid #eee; }
+    .category-item input { flex: 1; padding: 6px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; }
+    .category-item .actions { display: flex; gap: 5px; }
+    .category-item .actions button { padding: 4px 8px; font-size: 11px; border: none; border-radius: 4px; cursor: pointer; }
+    .category-item .add-child { background: #e3f2fd; color: #1976d2; }
+    .category-item .delete { background: #ffebee; color: #c62828; }
+    .add-category-btn { margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -248,6 +126,7 @@
     <div class="tabs">
       <button class="tab active" onclick="switchTab('upload')">上传图片</button>
       <button class="tab" onclick="switchTab('manage')">管理图片</button>
+      <button class="tab" onclick="switchTab('category')">分类管理</button>
     </div>
     
     <!-- 上传标签页 -->
@@ -263,18 +142,7 @@
       
       <div class="form-group">
         <label>选择分类</label>
-        <select id="category">
-          <option value="分类1">分类1</option>
-          <option value="分类2">分类2</option>
-          <option value="分类3">分类3</option>
-          <option value="分类4">分类4</option>
-          <option value="分类5">分类5</option>
-          <option value="分类6">分类6</option>
-          <option value="分类7">分类7</option>
-          <option value="分类8">分类8</option>
-          <option value="分类9">分类9</option>
-          <option value="分类10">分类10</option>
-        </select>
+        <select id="category"></select>
       </div>
       
       <div class="form-group">
@@ -297,19 +165,7 @@
     <!-- 管理标签页 -->
     <div id="manageTab" class="tab-content">
       <div class="filter-bar">
-        <select id="categoryFilter" onchange="loadGallery()">
-          <option value="">所有分类</option>
-          <option value="分类1">分类1</option>
-          <option value="分类2">分类2</option>
-          <option value="分类3">分类3</option>
-          <option value="分类4">分类4</option>
-          <option value="分类5">分类5</option>
-          <option value="分类6">分类6</option>
-          <option value="分类7">分类7</option>
-          <option value="分类8">分类8</option>
-          <option value="分类9">分类9</option>
-          <option value="分类10">分类10</option>
-        </select>
+        <select id="categoryFilter" onchange="loadGallery()"></select>
         <span class="count" id="imageCount">0 张图片</span>
         <button class="btn btn-small" onclick="loadGallery()">刷新</button>
       </div>
@@ -321,14 +177,28 @@
       </div>
       
       <div class="gallery-grid" id="galleryGrid"></div>
-      
       <div class="message" id="manageMessage"></div>
+    </div>
+    
+    <!-- 分类管理标签页 -->
+    <div id="categoryTab" class="tab-content">
+      <h2>分类列表</h2>
+      <p style="color: #666; font-size: 13px; margin-bottom: 15px;">支持无限层级，点击"添加子分类"创建下级分类</p>
+      
+      <div class="category-tree" id="categoryTree"></div>
+      
+      <button class="btn btn-small add-category-btn" onclick="addRootCategory()">+ 添加一级分类</button>
+      
+      <div style="margin-top: 20px;">
+        <button class="btn btn-success" onclick="saveCategories()">保存分类设置</button>
+      </div>
+      
+      <div class="message" id="categoryMessage"></div>
     </div>
     
     <a href="/" class="back-link">← 返回相册</a>
   </div>
   
-  <!-- 图片预览模态框 -->
   <div class="modal" id="imageModal" onclick="closeModal()">
     <span class="close">&times;</span>
     <img id="modalImage" src="" onclick="event.stopPropagation()">
@@ -338,32 +208,185 @@
     let selectedFiles = [];
     let galleryImages = [];
     let selectedImages = new Set();
+    let categories = [];
+    let categoryIdCounter = 1;
+
+    // 初始化
+    async function init() {
+      await loadCategoriesFromServer();
+      renderCategoryTree();
+      updateCategorySelects();
+    }
+    init();
+
+    // 从服务器加载分类
+    async function loadCategoriesFromServer() {
+      try {
+        const res = await fetch('/api/categories');
+        const data = await res.json();
+        categories = data.categories || [];
+        categoryIdCounter = getMaxId(categories) + 1;
+      } catch (e) {
+        categories = [
+          { id: '1', name: '分类1', children: [] },
+          { id: '2', name: '分类2', children: [] },
+          { id: '3', name: '分类3', children: [] }
+        ];
+      }
+    }
+
+    // 获取最大ID
+    function getMaxId(cats, max = 0) {
+      for (const cat of cats) {
+        const id = parseInt(cat.id) || 0;
+        if (id > max) max = id;
+        if (cat.children?.length) max = getMaxId(cat.children, max);
+      }
+      return max;
+    }
+
+    // 保存分类到服务器
+    async function saveCategories() {
+      // 更新分类名称
+      updateCategoryNames();
+      
+      try {
+        const res = await fetch('/api/categories', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ categories })
+        });
+        
+        if (res.ok) {
+          showCategoryMessage('分类保存成功！', 'success');
+          updateCategorySelects();
+        } else {
+          showCategoryMessage('保存失败', 'error');
+        }
+      } catch (e) {
+        showCategoryMessage('保存失败: ' + e.message, 'error');
+      }
+    }
+
+    // 从输入框更新分类名称
+    function updateCategoryNames() {
+      document.querySelectorAll('.category-item input').forEach(input => {
+        const id = input.dataset.id;
+        const cat = findCategoryById(categories, id);
+        if (cat) cat.name = input.value;
+      });
+    }
+
+    // 查找分类
+    function findCategoryById(cats, id) {
+      for (const cat of cats) {
+        if (cat.id === id) return cat;
+        if (cat.children?.length) {
+          const found = findCategoryById(cat.children, id);
+          if (found) return found;
+        }
+      }
+      return null;
+    }
+
+    // 添加根分类
+    function addRootCategory() {
+      categories.push({ id: String(categoryIdCounter++), name: '新分类', children: [] });
+      renderCategoryTree();
+    }
+
+    // 添加子分类
+    function addChildCategory(parentId) {
+      const parent = findCategoryById(categories, parentId);
+      if (parent) {
+        if (!parent.children) parent.children = [];
+        parent.children.push({ id: String(categoryIdCounter++), name: '新子分类', children: [] });
+        renderCategoryTree();
+      }
+    }
+
+    // 删除分类
+    function deleteCategory(id) {
+      if (!confirm('确定删除此分类及其所有子分类吗？')) return;
+      deleteCategoryFromList(categories, id);
+      renderCategoryTree();
+    }
+
+    function deleteCategoryFromList(cats, id) {
+      for (let i = 0; i < cats.length; i++) {
+        if (cats[i].id === id) {
+          cats.splice(i, 1);
+          return true;
+        }
+        if (cats[i].children?.length && deleteCategoryFromList(cats[i].children, id)) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // 渲染分类树
+    function renderCategoryTree() {
+      const tree = document.getElementById('categoryTree');
+      tree.innerHTML = renderCategoryItems(categories, 0);
+    }
+
+    function renderCategoryItems(cats, level) {
+      const levelClass = level === 0 ? '' : level === 1 ? 'child' : 'grandchild';
+      return cats.map(cat => `
+        <div class="category-item ${levelClass}">
+          <input type="text" value="${cat.name}" data-id="${cat.id}" placeholder="分类名称">
+          <div class="actions">
+            <button class="add-child" onclick="addChildCategory('${cat.id}')">+ 子分类</button>
+            <button class="delete" onclick="deleteCategory('${cat.id}')">删除</button>
+          </div>
+        </div>
+        ${cat.children?.length ? renderCategoryItems(cat.children, level + 1) : ''}
+      `).join('');
+    }
+
+    // 更新分类下拉框
+    function updateCategorySelects() {
+      const options = getFlatCategories(categories);
+      const optionsHtml = options.map(c => `<option value="${c.path}">${c.display}</option>`).join('');
+      
+      document.getElementById('category').innerHTML = optionsHtml;
+      document.getElementById('categoryFilter').innerHTML = '<option value="">所有分类</option>' + optionsHtml;
+    }
+
+    // 扁平化分类（带层级显示）
+    function getFlatCategories(cats, prefix = '', level = 0) {
+      let result = [];
+      for (const cat of cats) {
+        const path = prefix ? `${prefix}/${cat.name}` : cat.name;
+        const indent = '　'.repeat(level);
+        result.push({ path: cat.name, display: indent + cat.name });
+        if (cat.children?.length) {
+          result = result.concat(getFlatCategories(cat.children, path, level + 1));
+        }
+      }
+      return result;
+    }
+
+    function showCategoryMessage(text, type) {
+      const msg = document.getElementById('categoryMessage');
+      msg.textContent = text;
+      msg.className = `message ${type}`;
+      setTimeout(() => msg.className = 'message', 3000);
+    }
 
     // 切换标签页
     function switchTab(tab) {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.querySelector(`.tab:nth-child(${tab === 'upload' ? 1 : 2})`).classList.add('active');
+      
+      const tabIndex = { upload: 1, manage: 2, category: 3 }[tab];
+      document.querySelector(`.tab:nth-child(${tabIndex})`).classList.add('active');
       document.getElementById(tab + 'Tab').classList.add('active');
       
       if (tab === 'manage') loadGallery();
+      if (tab === 'category') renderCategoryTree();
     }
-
-    // 加载分类列表
-    async function loadCategories() {
-      try {
-        const res = await fetch('/api/gallery');
-        const data = await res.json();
-        const categories = Object.keys(data.gallery || {});
-        
-        document.getElementById('categoryList').innerHTML = categories.map(c => `<option value="${c}">`).join('');
-        document.getElementById('categoryFilter').innerHTML = '<option value="">所有分类</option>' + 
-          categories.map(c => `<option value="${c}">${c}</option>`).join('');
-      } catch (e) {
-        console.log('加载分类失败');
-      }
-    }
-    loadCategories();
 
     // 加载图片库
     async function loadGallery() {
@@ -402,56 +425,33 @@
             </div>
           </div>
         `).join('');
-        
       } catch (e) {
         grid.innerHTML = '<p style="text-align:center;color:#c00;">加载失败</p>';
       }
     }
 
-    // 选择/取消选择图片
     function toggleSelect(url) {
-      if (selectedImages.has(url)) {
-        selectedImages.delete(url);
-      } else {
-        selectedImages.add(url);
-      }
+      if (selectedImages.has(url)) selectedImages.delete(url);
+      else selectedImages.add(url);
       updateSelection();
     }
 
-    // 更新选择状态
     function updateSelection() {
       document.querySelectorAll('.gallery-item').forEach((item, idx) => {
         const url = galleryImages[idx]?.original;
         item.classList.toggle('selected', selectedImages.has(url));
       });
-      
       const count = selectedImages.size;
       document.getElementById('selectedCount').textContent = `已选择 ${count} 张`;
       document.getElementById('batchActions').classList.toggle('show', count > 0);
     }
 
-    // 清除选择
-    function clearSelection() {
-      selectedImages.clear();
-      updateSelection();
-    }
+    function clearSelection() { selectedImages.clear(); updateSelection(); }
+    function viewImage(url) { document.getElementById('modalImage').src = url; document.getElementById('imageModal').classList.add('show'); }
+    function closeModal() { document.getElementById('imageModal').classList.remove('show'); }
 
-    // 查看大图
-    function viewImage(url) {
-      document.getElementById('modalImage').src = url;
-      document.getElementById('imageModal').classList.add('show');
-    }
-
-    // 关闭模态框
-    function closeModal() {
-      document.getElementById('imageModal').classList.remove('show');
-    }
-
-    // 删除单张图片
     async function deleteImage(key) {
       if (!confirm('确定删除这张图片吗？')) return;
-      
-      // 从 URL 中提取正确的 key
       const parts = key.split('/');
       const category = parts[0];
       const fileName = parts[1];
@@ -459,49 +459,25 @@
       const fullKey = `${category}/${fileName}.${ext}`;
       
       try {
-        const res = await fetch('/api/delete', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ key: fullKey })
-        });
-        
-        if (res.ok) {
-          showManageMessage('删除成功', 'success');
-          loadGallery();
-        } else {
-          showManageMessage('删除失败', 'error');
-        }
-      } catch (e) {
-        showManageMessage('删除失败: ' + e.message, 'error');
-      }
+        const res = await fetch('/api/delete', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: fullKey }) });
+        if (res.ok) { showManageMessage('删除成功', 'success'); loadGallery(); }
+        else showManageMessage('删除失败', 'error');
+      } catch (e) { showManageMessage('删除失败: ' + e.message, 'error'); }
     }
 
-    // 批量删除
     async function deleteSelected() {
       if (!confirm(`确定删除选中的 ${selectedImages.size} 张图片吗？`)) return;
-      
       let success = 0, failed = 0;
-      
       for (const url of selectedImages) {
         const img = galleryImages.find(i => i.original === url);
         if (!img) continue;
-        
         const ext = url.split('.').pop();
         const key = `${img.category}/${img.name}.${ext}`;
-        
         try {
-          const res = await fetch('/api/delete', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ key })
-          });
-          if (res.ok) success++;
-          else failed++;
-        } catch (e) {
-          failed++;
-        }
+          const res = await fetch('/api/delete', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key }) });
+          if (res.ok) success++; else failed++;
+        } catch (e) { failed++; }
       }
-      
       selectedImages.clear();
       showManageMessage(`删除完成：成功 ${success} 张${failed ? '，失败 ' + failed + ' 张' : ''}`, failed ? 'error' : 'success');
       loadGallery();
@@ -514,7 +490,7 @@
       setTimeout(() => msg.className = 'message', 3000);
     }
 
-    // ========== 上传功能 ==========
+    // 上传功能
     const uploadArea = document.getElementById('uploadArea');
     const fileInput = document.getElementById('fileInput');
     const previewContainer = document.getElementById('previewContainer');
@@ -528,10 +504,7 @@
 
     function handleFiles(files) {
       for (const file of files) {
-        if (file.type.startsWith('image/')) {
-          selectedFiles.push(file);
-          addPreview(file);
-        }
+        if (file.type.startsWith('image/')) { selectedFiles.push(file); addPreview(file); }
       }
       updateUploadBtn();
     }
@@ -568,10 +541,7 @@
             const canvas = document.createElement('canvas');
             let w = img.width, h = img.height;
             const max = 2000;
-            if (w > max || h > max) {
-              if (w > h) { h = (h / w) * max; w = max; }
-              else { w = (w / h) * max; h = max; }
-            }
+            if (w > max || h > max) { if (w > h) { h = (h / w) * max; w = max; } else { w = (w / h) * max; h = max; } }
             canvas.width = w; canvas.height = h;
             canvas.getContext('2d').drawImage(img, 0, 0, w, h);
             canvas.toBlob(blob => resolve(new File([blob], file.name, { type: 'image/jpeg' })), 'image/jpeg', quality);
@@ -584,7 +554,7 @@
 
     uploadBtn.addEventListener('click', async () => {
       const category = document.getElementById('category').value;
-      if (selectedFiles.length === 0) return;
+      if (!category || selectedFiles.length === 0) return;
 
       uploadBtn.disabled = true;
       document.getElementById('progressContainer').style.display = 'block';
@@ -597,9 +567,7 @@
         document.getElementById('progressText').textContent = `上传 ${i + 1}/${selectedFiles.length}`;
         document.getElementById('progressFill').style.width = `${(i / selectedFiles.length) * 100}%`;
         
-        if (shouldCompress) {
-          try { file = await compressImage(file); } catch (e) {}
-        }
+        if (shouldCompress) { try { file = await compressImage(file); } catch (e) {} }
         
         try {
           const formData = new FormData();
@@ -622,10 +590,8 @@
       previewContainer.innerHTML = '';
       updateUploadBtn();
       uploadBtn.disabled = false;
-      loadCategories();
     });
 
-    // ESC 关闭模态框
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
   </script>
 </body>

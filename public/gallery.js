@@ -51,15 +51,41 @@ class Gallery {
             this.updateUrlForTag(tag);
         });
 
-        // 创建标签筛选器（使用预设分类）
-        const presetCategories = ['分类1', '分类2', '分类3', '分类4', '分类5', '分类6', '分类7', '分类8', '分类9', '分类10'];
-        this.tagFilter.createTagFilter(presetCategories);
+        // 创建标签筛选器（从 API 获取分类）
+        this.loadAndCreateTagFilter();
 
         // 设置模态窗口事件
         this.imageLoader.setupModalEvents();
 
         // 设置gallery的margin-top
         this.imageLoader.setGalleryMarginTop();
+    }
+
+    // 从 API 加载分类并创建标签筛选器
+    async loadAndCreateTagFilter() {
+        try {
+            const res = await fetch('/api/categories');
+            const data = await res.json();
+            const categories = this.flattenCategories(data.categories || []);
+            this.tagFilter.createTagFilter(categories);
+            this.availableCategories = categories;
+        } catch (e) {
+            // 如果加载失败，使用默认分类
+            const defaultCategories = ['分类1', '分类2', '分类3'];
+            this.tagFilter.createTagFilter(defaultCategories);
+            this.availableCategories = defaultCategories;
+        }
+    }
+
+    // 扁平化分类树
+    flattenCategories(cats, result = []) {
+        for (const cat of cats) {
+            result.push(cat.name);
+            if (cat.children?.length) {
+                this.flattenCategories(cat.children, result);
+            }
+        }
+        return result;
     }
 
     // 处理URL参数
@@ -75,11 +101,11 @@ class Gallery {
         console.log('处理URL参数:', { path, tagFromUrl });
 
         if (tagFromUrl && tagFromUrl !== '') {
-            const presetCategories = ['分类1', '分类2', '分类3', '分类4', '分类5', '分类6', '分类7', '分类8', '分类9', '分类10'];
-            console.log('可用标签:', presetCategories);
+            const availableCategories = this.availableCategories || [];
+            console.log('可用标签:', availableCategories);
 
             const decodedTag = decodeURIComponent(tagFromUrl);
-            if (presetCategories.includes(decodedTag)) {
+            if (availableCategories.includes(decodedTag)) {
                 console.log('找到匹配的标签:', decodedTag);
                 this.tagFilter.selectTagByValue(decodedTag);
                 this.imageLoader.filterImages(decodedTag);
