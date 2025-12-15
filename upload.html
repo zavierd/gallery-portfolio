@@ -214,6 +214,18 @@
       </div>
     </div>
     
+    <div class="form-group">
+      <div class="checkbox-group">
+        <input type="checkbox" id="compressImage" checked>
+        <label for="compressImage" style="margin: 0;">上传前压缩图片（加快上传速度）</label>
+      </div>
+      <select id="compressQuality" style="margin-top: 8px; width: auto;">
+        <option value="0.9">高质量 (90%)</option>
+        <option value="0.8" selected>中等质量 (80%)</option>
+        <option value="0.6">较低质量 (60%)</option>
+      </select>
+    </div>
+    
     <button class="btn" id="uploadBtn" disabled>上传图片</button>
     
     <div class="progress-container" id="progressContainer">
@@ -325,6 +337,44 @@
       message.style.display = 'block';
     }
 
+    // 压缩图片
+    async function compressImage(file, quality) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+            
+            // 限制最大尺寸为 2000px
+            const maxSize = 2000;
+            if (width > maxSize || height > maxSize) {
+              if (width > height) {
+                height = (height / width) * maxSize;
+                width = maxSize;
+              } else {
+                width = (width / height) * maxSize;
+                height = maxSize;
+              }
+            }
+            
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            canvas.toBlob((blob) => {
+              resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+            }, 'image/jpeg', quality);
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
     // 上传
     uploadBtn.addEventListener('click', async () => {
       const category = categoryInput.value.trim();
@@ -342,11 +392,26 @@
       message.style.display = 'none';
 
       const generatePreview = document.getElementById('generatePreview').checked;
+      const shouldCompress = document.getElementById('compressImage').checked;
+      const compressQuality = parseFloat(document.getElementById('compressQuality').value);
       let uploaded = 0;
       let failed = 0;
 
       for (let i = 0; i < selectedFiles.length; i++) {
-        const file = selectedFiles[i];
+        let file = selectedFiles[i];
+        
+        // 压缩图片
+        if (shouldCompress && file.type.startsWith('image/')) {
+          progressText.textContent = `正在压缩 ${i + 1}/${selectedFiles.length}: ${file.name}`;
+          try {
+            const originalSize = file.size;
+            file = await compressImage(file, compressQuality);
+            console.log(`压缩: ${(originalSize/1024).toFixed(0)}KB -> ${(file.size/1024).toFixed(0)}KB`);
+          } catch (e) {
+            console.warn('压缩失败，使用原图:', e);
+          }
+        }
+        
         progressText.textContent = `正在上传 ${i + 1}/${selectedFiles.length}: ${file.name}`;
         progressFill.style.width = `${(i / selectedFiles.length) * 100}%`;
 
