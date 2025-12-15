@@ -8,8 +8,6 @@ class TagFilter {
 
     // 创建标签筛选器
     createTagFilter(categories) {
-        // 隐藏标签筛选器
-        return;
         this.tagContainer = document.createElement('div');
         this.tagContainer.className = 'tag-filter-vertical';
         

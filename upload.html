@@ -262,9 +262,19 @@
       <div class="preview-container" id="previewContainer"></div>
       
       <div class="form-group">
-        <label>分类名称</label>
-        <input type="text" id="category" placeholder="输入分类名称" list="categoryList">
-        <datalist id="categoryList"></datalist>
+        <label>选择分类</label>
+        <select id="category">
+          <option value="分类1">分类1</option>
+          <option value="分类2">分类2</option>
+          <option value="分类3">分类3</option>
+          <option value="分类4">分类4</option>
+          <option value="分类5">分类5</option>
+          <option value="分类6">分类6</option>
+          <option value="分类7">分类7</option>
+          <option value="分类8">分类8</option>
+          <option value="分类9">分类9</option>
+          <option value="分类10">分类10</option>
+        </select>
       </div>
       
       <div class="form-group">
@@ -289,6 +299,16 @@
       <div class="filter-bar">
         <select id="categoryFilter" onchange="loadGallery()">
           <option value="">所有分类</option>
+          <option value="分类1">分类1</option>
+          <option value="分类2">分类2</option>
+          <option value="分类3">分类3</option>
+          <option value="分类4">分类4</option>
+          <option value="分类5">分类5</option>
+          <option value="分类6">分类6</option>
+          <option value="分类7">分类7</option>
+          <option value="分类8">分类8</option>
+          <option value="分类9">分类9</option>
+          <option value="分类10">分类10</option>
         </select>
         <span class="count" id="imageCount">0 张图片</span>
         <button class="btn btn-small" onclick="loadGallery()">刷新</button>
@@ -563,8 +583,7 @@
     }
 
     uploadBtn.addEventListener('click', async () => {
-      const category = document.getElementById('category').value.trim();
-      if (!category) { alert('请输入分类名称'); return; }
+      const category = document.getElementById('category').value;
       if (selectedFiles.length === 0) return;
 
       uploadBtn.disabled = true;

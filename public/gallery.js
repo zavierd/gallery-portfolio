@@ -51,9 +51,9 @@ class Gallery {
             this.updateUrlForTag(tag);
         });
 
-        // 创建标签筛选器
-        const categories = this.dataLoader.getCategories();
-        this.tagFilter.createTagFilter(categories);
+        // 创建标签筛选器（使用预设分类）
+        const presetCategories = ['分类1', '分类2', '分类3', '分类4', '分类5', '分类6', '分类7', '分类8', '分类9', '分类10'];
+        this.tagFilter.createTagFilter(presetCategories);
 
         // 设置模态窗口事件
         this.imageLoader.setupModalEvents();
@@ -75,13 +75,14 @@ class Gallery {
         console.log('处理URL参数:', { path, tagFromUrl });
 
         if (tagFromUrl && tagFromUrl !== '') {
-            const categories = this.dataLoader.getCategories();
-            console.log('可用标签:', categories);
+            const presetCategories = ['分类1', '分类2', '分类3', '分类4', '分类5', '分类6', '分类7', '分类8', '分类9', '分类10'];
+            console.log('可用标签:', presetCategories);
 
-            if (categories.includes(tagFromUrl)) {
-                console.log('找到匹配的标签:', tagFromUrl);
-                this.tagFilter.selectTagByValue(tagFromUrl);
-                this.imageLoader.filterImages(tagFromUrl);
+            const decodedTag = decodeURIComponent(tagFromUrl);
+            if (presetCategories.includes(decodedTag)) {
+                console.log('找到匹配的标签:', decodedTag);
+                this.tagFilter.selectTagByValue(decodedTag);
+                this.imageLoader.filterImages(decodedTag);
             } else {
                 console.log('标签不存在:', tagFromUrl);
                 if (this.tagFilter.getCurrentTag() !== 'all') {
