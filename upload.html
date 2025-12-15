@@ -443,7 +443,7 @@
       progressText.textContent = '上传完成！';
 
       if (failed === 0) {
-        showMessage(`成功上传 ${uploaded} 张图片！`, 'success');
+        showMessage(`成功上传 ${uploaded} 张图片！刷新首页即可查看。`, 'success');
         selectedFiles = [];
         previewContainer.innerHTML = '';
         updateUploadBtn();

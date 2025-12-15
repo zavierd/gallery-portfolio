@@ -5,7 +5,7 @@ class DataLoader {
         this.loading = false;
     }
 
-    // 从本地JSON文件加载图片数据
+    // 加载图片数据（优先从 API 获取，失败则从静态 JSON）
     async loadGalleryData() {
         if (this.loading) {
             return this.galleryData;
@@ -14,7 +14,15 @@ class DataLoader {
         this.loading = true;
         
         try {
-            const response = await fetch('gallery-index.json');
+            // 优先从 API 动态获取
+            let response = await fetch('/api/gallery');
+            
+            if (!response.ok) {
+                // API 失败，尝试从静态 JSON 获取
+                console.log('API 获取失败，尝试静态 JSON');
+                response = await fetch('gallery-index.json');
+            }
+            
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
