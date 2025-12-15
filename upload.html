@@ -172,6 +172,8 @@
       
       <div class="batch-actions" id="batchActions">
         <span id="selectedCount">已选择 0 张</span>
+        <select id="moveToCategory" style="padding: 6px; border-radius: 4px; border: 1px solid #ddd; font-size: 12px;"></select>
+        <button class="btn btn-small btn-success" onclick="moveSelected()">移动到分类</button>
         <button class="btn btn-small btn-danger" onclick="deleteSelected()">删除选中</button>
         <button class="btn btn-small" onclick="clearSelection()">取消选择</button>
       </div>
@@ -352,6 +354,7 @@
       
       document.getElementById('category').innerHTML = optionsHtml;
       document.getElementById('categoryFilter').innerHTML = '<option value="">所有分类</option>' + optionsHtml;
+      document.getElementById('moveToCategory').innerHTML = '<option value="">移动到...</option>' + optionsHtml;
     }
 
     // 扁平化分类（带层级显示）
@@ -480,6 +483,49 @@
       }
       selectedImages.clear();
       showManageMessage(`删除完成：成功 ${success} 张${failed ? '，失败 ' + failed + ' 张' : ''}`, failed ? 'error' : 'success');
+      loadGallery();
+    }
+
+    // 移动选中的图片到指定分类
+    async function moveSelected() {
+      const targetCategory = document.getElementById('moveToCategory').value;
+      if (!targetCategory) {
+        showManageMessage('请选择目标分类', 'error');
+        return;
+      }
+      if (selectedImages.size === 0) {
+        showManageMessage('请先选择图片', 'error');
+        return;
+      }
+
+      let success = 0, failed = 0;
+      for (const url of selectedImages) {
+        const img = galleryImages.find(i => i.original === url);
+        if (!img) continue;
+        
+        // 跳过同分类
+        if (img.category === targetCategory) {
+          continue;
+        }
+        
+        const ext = url.split('.').pop();
+        const sourceKey = `${img.category}/${img.name}.${ext}`;
+        
+        try {
+          const res = await fetch('/api/move', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sourceKey, targetCategory })
+          });
+          if (res.ok) success++;
+          else failed++;
+        } catch (e) {
+          failed++;
+        }
+      }
+      
+      selectedImages.clear();
+      showManageMessage(`移动完成：成功 ${success} 张${failed ? '，失败 ' + failed + ' 张' : ''}`, failed ? 'error' : 'success');
       loadGallery();
     }
 
