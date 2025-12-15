@@ -64,23 +64,9 @@ class ImageLoader {
         const width = window.innerWidth;
         let computedColumns, computedImagesPerLoad;
         
-        // 计算应用的列数和每次加载图片数量
-        if (width < 600) {
-            computedColumns = 2;
-            computedImagesPerLoad = 8;
-        } else if (width < 900) {
-            computedColumns = 3;
-            computedImagesPerLoad = 12;
-        } else if (width < 1200) {
-            computedColumns = 4;
-            computedImagesPerLoad = 16;
-        } else if (width < 1500) {
-            computedColumns = 5;
-            computedImagesPerLoad = 20;
-        } else {
-            computedColumns = 6;
-            computedImagesPerLoad = 24;
-        }
+        // 固定为单列布局
+        computedColumns = 1;
+        computedImagesPerLoad = 6;
         
         // 如果列数没有变化，仅更新加载图片数量，不重新排布
         if (computedColumns === this.columns) {
@@ -489,6 +475,8 @@ class ImageLoader {
 
     // 处理所有图片加载完成
     handleAllImagesLoaded() {
+        // 不显示加载完毕消息
+        return;
         if (!document.getElementById('all-loaded-message')) {
             const loadedMsg = document.createElement('div');
             loadedMsg.id = 'all-loaded-message';

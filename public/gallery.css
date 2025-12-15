@@ -3,9 +3,9 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.8em; /* Increase gap to prevent overlap */
-  width: 80%;
-  max-width: 1200px;
-  margin: 150px auto 20px; /* Adjust for header and tag filter */
+  width: 90%;
+  max-width: 600px;
+  margin: 20px auto; /* 居中显示 */
   padding: 10px;
   flex-grow: 1; /* Ensure gallery takes up available space */
   align-items: flex-start; /* Align items to the top */
