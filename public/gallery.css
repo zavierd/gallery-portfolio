@@ -78,23 +78,27 @@
 #nf-tag-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
   padding-bottom: 40px;
+  align-content: flex-start;
 }
 
 .nf-tag {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 14px;
+  height: 34px;
+  padding: 0 16px;
   background-color: var(--surface);
   border: 1px solid var(--border-color);
-  border-radius: 100px; /* Capsule shape */
-  font-size: 13px;
+  border-radius: 17px;
+  font-size: 14px;
   color: var(--text-color);
   cursor: pointer;
   transition: all 0.2s ease;
   user-select: none;
+  white-space: nowrap;
+  box-sizing: border-box;
 }
 
 .nf-tag:hover {
