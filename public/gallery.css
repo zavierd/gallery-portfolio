@@ -107,6 +107,9 @@
   overflow: hidden;
   opacity: 0;
   transition: opacity 0.3s;
+  /* Use Flexbox for centering */
+  align-items: center;
+  justify-content: center;
 }
 
 .modal.show {
@@ -115,7 +118,8 @@
 }
 
 .modal-content {
-  margin: auto;
+  /* Remove auto margins since we use flexbox */
+  margin: 0;
   max-width: 95%;
   max-height: 95vh;
   object-fit: contain;
