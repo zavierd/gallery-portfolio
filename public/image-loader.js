@@ -835,10 +835,26 @@ class ImageLoader {
         const span = document.getElementsByClassName('close')[0];
         const modalContent = document.querySelector('.modal-content');
         const loadOriginalBtn = document.getElementById('load-original-btn');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
 
         span.onclick = () => this.closeModal();
         modalContent.onclick = (event) => event.stopPropagation();
         modal.onclick = () => this.closeModal();
+
+        // 阻止左右切换按钮冒泡关闭模态框
+        if (prevBtn) {
+            prevBtn.onclick = (event) => {
+                event.stopPropagation();
+                this.showPrevImage();
+            };
+        }
+        if (nextBtn) {
+            nextBtn.onclick = (event) => {
+                event.stopPropagation();
+                this.showNextImage();
+            };
+        }
 
         // 下载原图按钮事件
         loadOriginalBtn.onclick = (event) => {
