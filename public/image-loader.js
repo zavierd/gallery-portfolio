@@ -20,6 +20,11 @@ class ImageLoader {
         this.currentHighResImage = null;
         this.isModalOpen = false;
         
+        // Navigation state
+        this.currentModalIndex = -1;
+        this.touchStartX = 0;
+        this.touchStartY = 0;
+        
         this.init();
     }
 
@@ -688,6 +693,14 @@ class ImageLoader {
         modal.style.display = 'block';
         document.body.classList.add('no-scroll');
         
+        // Find index of current image in the current list
+        const images = this.getCurrentImages();
+        this.currentModalIndex = images.findIndex(img => img.original === original);
+        if (this.currentModalIndex === -1) {
+            console.warn('Current image not found in list, navigation might be broken');
+            this.currentModalIndex = 0;
+        }
+        
         // 创建加载动画
         const createLoadingSpinner = () => {
             return `
@@ -833,11 +846,102 @@ class ImageLoader {
             this.downloadOriginalImage();
         };
 
+        // Keyboard navigation
         document.addEventListener('keydown', (event) => {
+            if (!this.isModalOpen) return;
+            
             if (event.key === 'Escape') {
                 this.closeModal();
+            } else if (event.key === 'ArrowLeft') {
+                this.showPrevImage();
+            } else if (event.key === 'ArrowRight') {
+                this.showNextImage();
             }
         });
+
+        // Touch navigation (Swipe)
+        modal.addEventListener('touchstart', (e) => {
+            this.touchStartX = e.changedTouches[0].screenX;
+            this.touchStartY = e.changedTouches[0].screenY;
+        }, {passive: true});
+
+        modal.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].screenX;
+            const touchEndY = e.changedTouches[0].screenY;
+            this.handleSwipe(touchEndX, touchEndY);
+        }, {passive: true});
+    }
+
+    handleSwipe(endX, endY) {
+        const diffX = endX - this.touchStartX;
+        const diffY = endY - this.touchStartY;
+        
+        // Threshold for swipe (50px) and ensure horizontal movement dominates vertical
+        if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY)) {
+            if (diffX > 0) {
+                this.showPrevImage(); // Swipe Right -> Prev
+            } else {
+                this.showNextImage(); // Swipe Left -> Next
+            }
+        }
+    }
+
+    showPrevImage() {
+        if (this.currentModalIndex > 0) {
+            this.switchModalImage(this.currentModalIndex - 1);
+        }
+    }
+
+    showNextImage() {
+        const images = this.getCurrentImages();
+        if (this.currentModalIndex < images.length - 1) {
+            this.switchModalImage(this.currentModalIndex + 1);
+        }
+    }
+
+    switchModalImage(index) {
+        // Cancel current high-res loading if any
+        if (this.currentHighResImage) {
+            this.currentHighResImage.onload = null;
+            this.currentHighResImage.onerror = null;
+            this.currentHighResImage.src = '';
+            this.currentHighResImage = null;
+        }
+
+        this.currentModalIndex = index;
+        const images = this.getCurrentImages();
+        const imageData = images[index];
+        
+        if (!imageData) return;
+
+        // Reset modal state for new image
+        const modalImg = document.getElementById('img01');
+        const exifInfo = document.getElementById('exif-info');
+        const loadOriginalBtn = document.getElementById('load-original-btn');
+        
+        // Show preview first
+        modalImg.src = imageData.preview;
+        modalImg.style.filter = 'none'; // Reset any filter
+        this.currentOriginalUrl = imageData.original;
+        
+        // Reset download button state
+        loadOriginalBtn.style.display = 'flex';
+        loadOriginalBtn.innerHTML = '下载原图';
+        loadOriginalBtn.classList.remove('loading');
+        
+        // Load EXIF for new image
+        exifInfo.innerHTML = ''; // Clear old EXIF
+        this.getExifInfo(imageData.original).then(exifData => {
+            if (this.isModalOpen && this.currentModalIndex === index) {
+                exifInfo.innerHTML = this.createExifInfo(exifData);
+            }
+        });
+        
+        // Optionally pre-load high res? For now, stick to standard behavior: user clicks to download.
+        // Wait, standard behavior was "load original" button loads it. 
+        // Now it's "Download". So we just show preview.
+        // But previously openModal() would also call getExifInfo.
+        // So this logic mirrors openModal's setup.
     }
 
     // 关闭模态窗口
