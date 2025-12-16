@@ -53,11 +53,15 @@ class NegativeFloor {
         // to prevent conflict with scrolling the tag list and clicking tags/inputs.
         if (this.isOpen) {
              const isHeader = target.closest('.nf-header');
+             const isInput = target.tagName === 'INPUT';
+             const isCloseBtn = target.closest('#nf-close-btn');
+             
              // Also allow if we are at the very top of scroll content and pulling up? 
              // No, that's where conflict happens. 
              // Let's restrict to Header for "Pull Up to Close" to ensure content is interactive.
              
-             if (isHeader) {
+             // IMPORTANT: Exclude input and buttons from drag start to allow focus/click
+             if (isHeader && !isInput && !isCloseBtn) {
                  this.startY = y;
                  this.isDragging = true;
                  this.dragMode = 'close';
