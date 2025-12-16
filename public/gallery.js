@@ -66,6 +66,10 @@ class Gallery {
         try {
             const res = await fetch('/api/categories');
             const data = await res.json();
+            
+            // Store raw tree for Negative Floor
+            this.categoriesRaw = data.categories || [];
+            
             const categories = this.flattenCategories(data.categories || []);
             this.tagFilter.createTagFilter(categories);
             this.availableCategories = categories;
@@ -79,6 +83,9 @@ class Gallery {
             const defaultCategories = ['分类1', '分类2', '分类3'];
             this.tagFilter.createTagFilter(defaultCategories);
             this.availableCategories = defaultCategories;
+            
+            // Fallback for raw data
+            this.categoriesRaw = defaultCategories.map(name => ({ name, children: [] }));
             
             // 初始化负一楼 (fallback)
             if (window.NegativeFloor) {

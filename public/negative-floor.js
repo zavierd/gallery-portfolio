@@ -130,7 +130,10 @@ class NegativeFloor {
         this.container.style.transition = 'transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)';
         this.container.style.transform = 'translateY(0)';
         document.body.style.overflow = 'hidden'; // Lock scroll
-        this.renderTags(this.gallery.availableCategories || []);
+        
+        // Pass hierarchical data if available, else flat
+        const categories = this.gallery.categoriesRaw || this.gallery.availableCategories || [];
+        this.renderTags(categories);
     }
 
     close() {
@@ -144,14 +147,68 @@ class NegativeFloor {
         this.handleSearch('');
     }
 
-    renderTags(tags) {
+    renderTags(categories) {
         this.tagContainer.innerHTML = '';
         
-        // Always add "All" tag
-        this.createTagElement('全部', 'all');
+        // Create "All" section at the top (optional, but good for UX)
+        // Or just a standalone "All" button
+        const allGroup = document.createElement('div');
+        allGroup.className = 'nf-group';
+        const allTags = document.createElement('div');
+        allTags.className = 'nf-group-tags';
         
-        tags.forEach(tag => {
-            this.createTagElement(tag, tag);
+        const allTagEl = this.createTagElement('全部', 'all');
+        allTags.appendChild(allTagEl);
+        allGroup.appendChild(allTags);
+        this.tagContainer.appendChild(allGroup);
+        
+        // Iterate categories
+        categories.forEach(cat => {
+            // If it's just a string (fallback), treat as simple tag
+            if (typeof cat === 'string') {
+                const tagEl = this.createTagElement(cat, cat);
+                // Append to 'allTags' or create new? Let's just create a generic group if mixed.
+                // Assuming consistent data structure now.
+                // If it's mixed string, we append to a generic container? 
+                // Let's stick to the tree structure we expect: { name, children }
+                return;
+            }
+            
+            // It's an object { name, children }
+            const group = document.createElement('div');
+            group.className = 'nf-group';
+            
+            // Level 1 Title (Clickable)
+            const title = document.createElement('div');
+            title.className = 'nf-group-title';
+            title.textContent = cat.name;
+            title.onclick = () => {
+                this.selectTag(cat.name);
+            };
+            
+            // Check if active (if level 1 tag is selected)
+            if (this.gallery.tagFilter && this.gallery.tagFilter.currentTag === cat.name) {
+                title.classList.add('active');
+            }
+            
+            group.appendChild(title);
+            
+            // Level 2 Tags
+            if (cat.children && cat.children.length > 0) {
+                const tagsContainer = document.createElement('div');
+                tagsContainer.className = 'nf-group-tags';
+                
+                cat.children.forEach(child => {
+                    // Child can be string or object? Assuming object {name} based on flattenCategories
+                    const childName = child.name || child;
+                    const tagEl = this.createTagElement(childName, childName);
+                    tagsContainer.appendChild(tagEl);
+                });
+                
+                group.appendChild(tagsContainer);
+            }
+            
+            this.tagContainer.appendChild(group);
         });
     }
 
@@ -165,26 +222,73 @@ class NegativeFloor {
             tagEl.classList.add('active');
         }
         
-        tagEl.onclick = () => {
-            this.gallery.tagFilter.selectTagByValue(value);
-            this.gallery.imageLoader.filterImages(value);
-            this.gallery.updateUrlForTag(value);
-            this.close();
+        tagEl.onclick = (e) => {
+            e.stopPropagation(); // Prevent bubbling if needed
+            this.selectTag(value);
         };
         
-        this.tagContainer.appendChild(tagEl);
+        return tagEl;
+    }
+    
+    selectTag(value) {
+        this.gallery.tagFilter.selectTagByValue(value);
+        this.gallery.imageLoader.filterImages(value);
+        this.gallery.updateUrlForTag(value);
+        this.close();
     }
 
     handleSearch(query) {
-        const tags = this.tagContainer.getElementsByClassName('nf-tag');
         const lowerQuery = query.toLowerCase();
+        const groups = this.tagContainer.getElementsByClassName('nf-group');
         
-        Array.from(tags).forEach(tag => {
-            const text = tag.textContent.toLowerCase();
-            if (text.includes(lowerQuery)) {
-                tag.style.display = 'flex';
+        Array.from(groups).forEach(group => {
+            const title = group.querySelector('.nf-group-title');
+            const tags = group.querySelectorAll('.nf-tag');
+            let hasVisibleTags = false;
+            
+            // Check title
+            let titleVisible = false;
+            if (title) {
+                const titleText = title.textContent.toLowerCase();
+                if (titleText.includes(lowerQuery)) {
+                    titleVisible = true;
+                }
+            }
+            
+            // Check tags
+            tags.forEach(tag => {
+                const text = tag.textContent.toLowerCase();
+                if (text.includes(lowerQuery)) {
+                    tag.style.display = 'inline-flex';
+                    hasVisibleTags = true;
+                } else {
+                    tag.style.display = 'none';
+                }
+            });
+            
+            // Visibility logic:
+            // If title matches, show group and all tags? Or just title?
+            // Usually if title matches, we might want to show the whole group or just the title.
+            // Let's say if title matches, we show the title.
+            // If tags match, we show the tags.
+            // If neither, hide group.
+            
+            // Revised: 
+            // If query is empty, show everything.
+            if (!lowerQuery) {
+                group.style.display = 'block';
+                if (title) title.style.display = 'block';
+                tags.forEach(t => t.style.display = 'inline-flex');
+                return;
+            }
+            
+            if (titleVisible || hasVisibleTags) {
+                group.style.display = 'block';
+                // If title matched, show it. If not, but tags matched, maybe show title as context?
+                // Let's always show title if any child matches, for context.
+                if (title) title.style.display = 'block'; 
             } else {
-                tag.style.display = 'none';
+                group.style.display = 'none';
             }
         });
     }
