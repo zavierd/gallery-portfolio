@@ -370,6 +370,10 @@
   transform: translate(-50%, -50%);
 }
 
+.hidden {
+  display: none !important;
+}
+
 .spinner {
   width: 32px;
   height: 32px;

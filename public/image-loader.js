@@ -221,12 +221,14 @@ class ImageLoader {
         }
 
         // 设置加载状态
-        this.showLoadingMessage();
+        const isInitialLoad = this.currentIndex === 0;
+        if (!isInitialLoad) {
+            this.showLoadingMessage();
+        }
         
-        // 确保gallery可见
+        // 确保gallery可见 (Do not hide global loader here yet)
         if (this.galleryElement.style.opacity !== '1') {
-            this.galleryElement.style.opacity = '1';
-            document.getElementById('loading').classList.add('hidden');
+            // Wait for images to load
         }
         
         // 计算需要加载的图片数量
@@ -286,7 +288,14 @@ class ImageLoader {
         const loadSingleImage = (index) => {
             // 检查是否完成加载
             if (index >= images.length || remainingToLoad <= 0) {
-                this.hideLoadingMessage();
+                if (!isInitialLoad) {
+                    this.hideLoadingMessage();
+                } else {
+                    // Hide global loader and show gallery on first batch done
+                    const globalLoader = document.getElementById('loading');
+                    if (globalLoader) globalLoader.classList.add('hidden');
+                    this.galleryElement.style.opacity = '1';
+                }
                 
                 if (index >= images.length) {
                     console.log('所有图片已加载完毕');
