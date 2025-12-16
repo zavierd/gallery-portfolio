@@ -934,6 +934,23 @@ class ImageLoader {
         const modalImg = document.getElementById('img01');
         const exifInfo = document.getElementById('exif-info');
         const loadOriginalBtn = document.getElementById('load-original-btn');
+        const loader = document.getElementById('modal-loading');
+        
+        // Show loader, hide image
+        if (loader) loader.style.display = 'flex';
+        modalImg.style.opacity = '0';
+
+        // Load new image
+        modalImg.onload = () => {
+             modalImg.style.opacity = '1';
+             if (loader) loader.style.display = 'none';
+             modalImg.onload = null;
+        };
+        modalImg.onerror = () => {
+             modalImg.style.opacity = '1';
+             if (loader) loader.style.display = 'none';
+             modalImg.onerror = null;
+        };
         
         // Show preview first
         modalImg.src = imageData.preview;
@@ -952,12 +969,6 @@ class ImageLoader {
                 exifInfo.innerHTML = this.createExifInfo(exifData);
             }
         });
-        
-        // Optionally pre-load high res? For now, stick to standard behavior: user clicks to download.
-        // Wait, standard behavior was "load original" button loads it. 
-        // Now it's "Download". So we just show preview.
-        // But previously openModal() would also call getExifInfo.
-        // So this logic mirrors openModal's setup.
     }
 
     // 关闭模态窗口

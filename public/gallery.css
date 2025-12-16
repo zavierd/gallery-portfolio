@@ -96,6 +96,15 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+#modal-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2001;
+  pointer-events: none;
+}
+
 /* Modal */
 .modal {
   display: none;
@@ -127,6 +136,7 @@
   box-shadow: 0 20px 50px rgba(0,0,0,0.5);
   animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   display: block; /* Ensure it behaves as a block element within flex container */
+  transition: opacity 0.3s ease;
 }
 
 /* Navigation Buttons in Modal */
