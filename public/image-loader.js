@@ -690,7 +690,7 @@ class ImageLoader {
             return;
         }
         
-        modal.style.display = 'block';
+        modal.style.display = 'flex';
         document.body.classList.add('no-scroll');
         
         // Find index of current image in the current list
