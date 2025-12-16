@@ -49,10 +49,11 @@
   padding: 12px 20px;
   overflow-x: auto;
   white-space: nowrap;
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border-color);
+  /* background: var(--glass-bg); Remove glass background */
+  background: transparent;
+  /* backdrop-filter: blur(12px); Remove blur effect */
+  /* -webkit-backdrop-filter: blur(12px); */
+  /* border-bottom: 1px solid var(--border-color); Remove border */
   
   /* Hide Scrollbar */
   scrollbar-width: none;
