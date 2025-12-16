@@ -9,7 +9,7 @@ class NegativeFloor {
         this.isOpen = false;
         this.startY = 0;
         this.currentY = 0;
-        this.threshold = 150; // Pull threshold to open
+        this.threshold = 80; // Pull threshold to open
         
         this.init();
     }
@@ -37,6 +37,7 @@ class NegativeFloor {
 
     handleTouchStart(e) {
         const y = e.touches[0].clientY;
+        const target = e.target;
         
         // Scenario 1: Opening (Pull Down)
         // Only trigger if at top of page and not already open
@@ -47,10 +48,16 @@ class NegativeFloor {
         }
         
         // Scenario 2: Closing (Pull Up)
-        // Only trigger if already open and content is scrolled to top
+        // Only trigger if already open
+        // CRITICAL: Only allow closing via dragging the HEADER or empty space, 
+        // to prevent conflict with scrolling the tag list and clicking tags/inputs.
         if (this.isOpen) {
-             const contentScrollTop = this.tagContainer.parentElement.scrollTop || 0;
-             if (contentScrollTop <= 0) {
+             const isHeader = target.closest('.nf-header');
+             // Also allow if we are at the very top of scroll content and pulling up? 
+             // No, that's where conflict happens. 
+             // Let's restrict to Header for "Pull Up to Close" to ensure content is interactive.
+             
+             if (isHeader) {
                  this.startY = y;
                  this.isDragging = true;
                  this.dragMode = 'close';
