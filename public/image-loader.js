@@ -671,6 +671,46 @@ class ImageLoader {
         this.loadNextImages(tag);
     }
 
+    // 创建EXIF信息显示（提取为独立方法）
+    createExifInfo(exifData) {
+        if (!exifData) return '';
+        
+        let exifHtml = '<div class="exif-info">';
+        
+        // 基本信息
+        if (exifData.aperture) {
+            exifHtml += `<p><strong>光圈:</strong> f/${exifData.aperture}</p>`;
+        }
+        if (exifData.shutterSpeed) {
+            exifHtml += `<p><strong>快门:</strong> ${exifData.shutterSpeed}s</p>`;
+        }
+        if (exifData.iso) {
+            exifHtml += `<p><strong>ISO:</strong> ${exifData.iso}</p>`;
+        }
+        if (exifData.focalLength) {
+            exifHtml += `<p><strong>焦距:</strong> ${exifData.focalLength}mm</p>`;
+        }
+        if (exifData.camera) {
+            exifHtml += `<p><strong>相机:</strong> ${exifData.camera}</p>`;
+        }
+        if (exifData.lens) {
+            exifHtml += `<p><strong>镜头:</strong> ${exifData.lens}</p>`;
+        }
+        
+        // 地理位置信息
+        if (exifData.gps) {
+            exifHtml += `<p><strong>位置:</strong> ${exifData.gps}</p>`;
+        }
+        
+        // 拍摄时间
+        if (exifData.dateTime) {
+            exifHtml += `<p><strong>拍摄时间:</strong> ${exifData.dateTime}</p>`;
+        }
+        
+        exifHtml += '</div>';
+        return exifHtml;
+    }
+
     // 打开模态窗口
     openModal(original, preview) {
         const modal = document.getElementById('myModal');
@@ -708,46 +748,6 @@ class ImageLoader {
                     <div class="spinner"></div>
                 </div>
             `;
-        };
-        
-        // 创建EXIF信息显示
-        const createExifInfo = (exifData) => {
-            if (!exifData) return '';
-            
-            let exifHtml = '<div class="exif-info">';
-            
-            // 基本信息
-            if (exifData.aperture) {
-                exifHtml += `<p><strong>光圈:</strong> f/${exifData.aperture}</p>`;
-            }
-            if (exifData.shutterSpeed) {
-                exifHtml += `<p><strong>快门:</strong> ${exifData.shutterSpeed}s</p>`;
-            }
-            if (exifData.iso) {
-                exifHtml += `<p><strong>ISO:</strong> ${exifData.iso}</p>`;
-            }
-            if (exifData.focalLength) {
-                exifHtml += `<p><strong>焦距:</strong> ${exifData.focalLength}mm</p>`;
-            }
-            if (exifData.camera) {
-                exifHtml += `<p><strong>相机:</strong> ${exifData.camera}</p>`;
-            }
-            if (exifData.lens) {
-                exifHtml += `<p><strong>镜头:</strong> ${exifData.lens}</p>`;
-            }
-            
-            // 地理位置信息
-            if (exifData.gps) {
-                exifHtml += `<p><strong>位置:</strong> ${exifData.gps}</p>`;
-            }
-            
-            // 拍摄时间
-            if (exifData.dateTime) {
-                exifHtml += `<p><strong>拍摄时间:</strong> ${exifData.dateTime}</p>`;
-            }
-            
-            exifHtml += '</div>';
-            return exifHtml;
         };
         
         // 检查当前模态窗口是否已经显示的是原图
