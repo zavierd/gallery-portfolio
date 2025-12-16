@@ -569,8 +569,16 @@ class ImageLoader {
 
     // 设置gallery的margin-top
     setGalleryMarginTop() {
-        const headerHeight = 0;
-        this.galleryElement.style.marginTop = `${headerHeight + 20}px`;
+        // 由于 tag-filter 现在是 position: sticky 并且 top: 0，
+        // 且 index.html 中没有 header，
+        // gallery 实际上会紧随 tag-filter 之后。
+        // 但由于 sticky 元素占据空间，我们不需要额外的 margin-top，
+        // 除非我们想要一些间距。
+        // 之前的 headerHeight = 0 加 20px 可能导致了额外的空白，
+        // 尤其是如果 tag-filter 本身就有 padding。
+        
+        // 我们将其设为 0，因为 gallery.css 中 .gallery 已经有了 padding: 20px
+        this.galleryElement.style.marginTop = '0px';
     }
 
     // 更新悬停效果

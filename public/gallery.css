@@ -40,7 +40,7 @@
 /* Tag Filter - Optimized */
 .tag-filter {
   position: sticky;
-  top: 53px; /* Match header height */
+  top: 0; /* Align to very top since there is no header in index.html structure */
   z-index: 900;
   width: 100%;
   display: flex;
@@ -49,11 +49,10 @@
   padding: 12px 20px;
   overflow-x: auto;
   white-space: nowrap;
-  /* background: var(--glass-bg); Remove glass background */
-  background: transparent;
-  /* backdrop-filter: blur(12px); Remove blur effect */
-  /* -webkit-backdrop-filter: blur(12px); */
-  /* border-bottom: 1px solid var(--border-color); Remove border */
+  background: var(--glass-bg); /* Restore glass background */
+  backdrop-filter: blur(12px); /* Restore blur effect */
+  -webkit-backdrop-filter: blur(12px);
+  /* border-bottom: 1px solid var(--border-color); Keep border removed for cleaner look or restore if preferred */
   
   /* Hide Scrollbar */
   scrollbar-width: none;
@@ -240,7 +239,7 @@
   }
   
   .tag-filter {
-    top: 50px;
+    top: 0;
     justify-content: flex-start; /* Left align on mobile for scrolling */
     padding: 10px 16px;
   }
