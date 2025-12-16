@@ -76,23 +76,22 @@
 }
 
 #nf-tag-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   padding-bottom: 40px;
 }
 
 .nf-tag {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 10px;
+  padding: 6px 14px;
   background-color: var(--surface);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  font-size: 14px;
+  border-radius: 100px; /* Capsule shape */
+  font-size: 13px;
   color: var(--text-color);
-  text-align: center;
   cursor: pointer;
   transition: all 0.2s ease;
   user-select: none;

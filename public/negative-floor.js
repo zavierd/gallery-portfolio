@@ -36,10 +36,25 @@ class NegativeFloor {
     }
 
     handleTouchStart(e) {
+        const y = e.touches[0].clientY;
+        
+        // Scenario 1: Opening (Pull Down)
         // Only trigger if at top of page and not already open
-        if (window.scrollY <= 0 && !this.isOpen) {
-            this.startY = e.touches[0].clientY;
+        if (!this.isOpen && window.scrollY <= 0) {
+            this.startY = y;
             this.isDragging = true;
+            this.dragMode = 'open';
+        }
+        
+        // Scenario 2: Closing (Pull Up)
+        // Only trigger if already open and content is scrolled to top
+        if (this.isOpen) {
+             const contentScrollTop = this.tagContainer.parentElement.scrollTop || 0;
+             if (contentScrollTop <= 0) {
+                 this.startY = y;
+                 this.isDragging = true;
+                 this.dragMode = 'close';
+             }
         }
     }
 
@@ -49,15 +64,25 @@ class NegativeFloor {
         const y = e.touches[0].clientY;
         const diff = y - this.startY;
         
-        // Only allow pulling down
-        if (diff > 0) {
-            // Add resistance
-            this.currentY = Math.pow(diff, 0.8);
-            
-            // If dragging down, prevent default scrolling
-            if (e.cancelable) e.preventDefault();
-            
-            this.updatePosition(this.currentY);
+        // Handling Opening (Pull Down)
+        if (this.dragMode === 'open') {
+            if (diff > 0) {
+                // Add resistance
+                this.currentY = Math.pow(diff, 0.8);
+                if (e.cancelable) e.preventDefault();
+                this.updatePosition(this.currentY - this.container.offsetHeight);
+            }
+        }
+        
+        // Handling Closing (Pull Up)
+        if (this.dragMode === 'close') {
+            if (diff < 0) {
+                 // No resistance needed for closing usually, or maybe slight
+                 this.currentY = diff; // Negative value
+                 if (e.cancelable) e.preventDefault();
+                 // We translate from 0 to negative
+                 this.updatePosition(this.currentY);
+            }
         }
     }
 
@@ -65,23 +90,28 @@ class NegativeFloor {
         if (!this.isDragging) return;
         this.isDragging = false;
         
-        if (this.currentY > this.threshold) {
-            this.open();
-        } else {
-            this.close();
+        if (this.dragMode === 'open') {
+            if (this.currentY > this.threshold) {
+                this.open();
+            } else {
+                this.close();
+            }
+        } else if (this.dragMode === 'close') {
+            // If pulled up enough (negative value), close it
+            if (this.currentY < -this.threshold) {
+                this.close();
+            } else {
+                this.open(); // Snap back to open
+            }
         }
         
         this.currentY = 0;
+        this.dragMode = null;
     }
 
     updatePosition(y) {
-        // We translate the negative floor down
-        // It starts at -100% (-window.innerHeight)
-        // So we add y to that
-        if (!this.isOpen) {
-            this.container.style.transform = `translateY(${y - this.container.offsetHeight}px)`;
-            this.container.style.transition = 'none';
-        }
+        this.container.style.transform = `translateY(${y}px)`;
+        this.container.style.transition = 'none';
     }
 
     open() {
