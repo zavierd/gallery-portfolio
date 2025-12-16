@@ -9,6 +9,18 @@
     <link rel="icon" href="public/assets/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
+    <!-- Negative First Floor (Pull to Reveal) -->
+    <div id="negative-floor">
+      <div class="nf-header">
+        <div class="search-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="nf-search-input" placeholder="搜索标签..." />
+        </div>
+        <div id="nf-close-btn">&times;</div>
+      </div>
+      <div id="nf-tag-grid" class="nf-content"></div>
+    </div>
+
     <div id="loading"></div>
     <div class="gallery" id="gallery"></div>
 
@@ -27,6 +39,7 @@
     <script src="public/data-loader.js?v=4"></script>
     <script src="public/tag-filter.js?v=4"></script>
     <script src="public/image-loader.js?v=4"></script>
+    <script src="public/negative-floor.js?v=4"></script>
     <script src="public/auto-scroll.js?v=4"></script>
     <script src="public/layout.js?v=4"></script>
     <script src="public/gallery.js?v=4"></script>

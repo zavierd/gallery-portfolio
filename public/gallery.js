@@ -69,11 +69,21 @@ class Gallery {
             const categories = this.flattenCategories(data.categories || []);
             this.tagFilter.createTagFilter(categories);
             this.availableCategories = categories;
+            
+            // 初始化负一楼
+            if (window.NegativeFloor) {
+                this.negativeFloor = new NegativeFloor(this);
+            }
         } catch (e) {
             // 如果加载失败，使用默认分类
             const defaultCategories = ['分类1', '分类2', '分类3'];
             this.tagFilter.createTagFilter(defaultCategories);
             this.availableCategories = defaultCategories;
+            
+            // 初始化负一楼 (fallback)
+            if (window.NegativeFloor) {
+                this.negativeFloor = new NegativeFloor(this);
+            }
         }
     }
 
