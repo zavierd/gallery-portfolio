@@ -4,6 +4,7 @@
   flex-wrap: wrap;
   gap: 12px;
   width: 100%;
+  box-sizing: border-box; /* Prevent padding from adding to width */
   max-width: 1800px; /* Increased max-width for 8 columns */
   margin: 0 auto;
   padding: 20px;
@@ -47,6 +48,7 @@
   justify-content: center;
   gap: 10px;
   padding: 12px 20px;
+  box-sizing: border-box; /* Prevent padding from adding to width */
   overflow-x: auto;
   white-space: nowrap;
   background: var(--glass-bg); /* Restore glass background */
@@ -247,6 +249,7 @@
     top: 0;
     justify-content: flex-start; /* Left align on mobile for scrolling */
     padding: 10px 16px;
+    padding-right: 20px; /* Add right padding directly */
   }
   
   .tag {
