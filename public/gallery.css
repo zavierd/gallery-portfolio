@@ -129,6 +129,48 @@
   display: block; /* Ensure it behaves as a block element within flex container */
 }
 
+/* Navigation Buttons in Modal */
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  font-size: 40px;
+  font-weight: bold;
+  padding: 20px;
+  cursor: pointer;
+  user-select: none;
+  z-index: 2002;
+  transition: opacity 0.3s, background-color 0.3s;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.3);
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-btn:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.prev-btn {
+  left: 20px;
+}
+
+.next-btn {
+  right: 20px;
+}
+
+@media (max-width: 768px) {
+  .nav-btn {
+    display: none; /* Hide arrows on mobile, rely on swipe */
+  }
+  .prev-btn { left: 10px; }
+  .next-btn { right: 10px; }
+}
+
 @keyframes zoomIn {
   from { transform: scale(0.95); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
