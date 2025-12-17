@@ -150,8 +150,7 @@ class NegativeFloor {
     renderTags(categories) {
         this.tagContainer.innerHTML = '';
         
-        // Create "All" section at the top (optional, but good for UX)
-        // Or just a standalone "All" button
+        // Create "All" button at the top
         const allGroup = document.createElement('div');
         allGroup.className = 'nf-group';
         const allTags = document.createElement('div');
@@ -162,23 +161,27 @@ class NegativeFloor {
         allGroup.appendChild(allTags);
         this.tagContainer.appendChild(allGroup);
         
-        // Iterate categories
+        // 递归收集所有分类（扁平化）
+        const allCategories = this.flattenAllCategories(categories);
+        
+        // 按一级分类分组显示
         categories.forEach(cat => {
-            // If it's just a string (fallback), treat as simple tag
             if (typeof cat === 'string') {
+                const group = document.createElement('div');
+                group.className = 'nf-group';
+                const tagsContainer = document.createElement('div');
+                tagsContainer.className = 'nf-group-tags';
                 const tagEl = this.createTagElement(cat, cat);
-                // Append to 'allTags' or create new? Let's just create a generic group if mixed.
-                // Assuming consistent data structure now.
-                // If it's mixed string, we append to a generic container? 
-                // Let's stick to the tree structure we expect: { name, children }
+                tagsContainer.appendChild(tagEl);
+                group.appendChild(tagsContainer);
+                this.tagContainer.appendChild(group);
                 return;
             }
             
-            // It's an object { name, children }
             const group = document.createElement('div');
             group.className = 'nf-group';
             
-            // Level 1 Title (Clickable)
+            // 一级分类标题（可点击）
             const title = document.createElement('div');
             title.className = 'nf-group-title';
             title.textContent = cat.name;
@@ -186,21 +189,20 @@ class NegativeFloor {
                 this.selectTag(cat.name);
             };
             
-            // Check if active (if level 1 tag is selected)
             if (this.gallery.tagFilter && this.gallery.tagFilter.currentTag === cat.name) {
                 title.classList.add('active');
             }
             
             group.appendChild(title);
             
-            // Level 2 Tags
-            if (cat.children && cat.children.length > 0) {
+            // 收集所有子分类（包括二级、三级等）
+            const childCategories = this.collectAllChildren(cat.children || []);
+            
+            if (childCategories.length > 0) {
                 const tagsContainer = document.createElement('div');
                 tagsContainer.className = 'nf-group-tags';
                 
-                cat.children.forEach(child => {
-                    // Child can be string or object? Assuming object {name} based on flattenCategories
-                    const childName = child.name || child;
+                childCategories.forEach(childName => {
                     const tagEl = this.createTagElement(childName, childName);
                     tagsContainer.appendChild(tagEl);
                 });
@@ -210,6 +212,30 @@ class NegativeFloor {
             
             this.tagContainer.appendChild(group);
         });
+    }
+    
+    // 递归收集所有子分类名称
+    collectAllChildren(children, result = []) {
+        children.forEach(child => {
+            const name = child.name || child;
+            result.push(name);
+            if (child.children && child.children.length > 0) {
+                this.collectAllChildren(child.children, result);
+            }
+        });
+        return result;
+    }
+    
+    // 扁平化所有分类
+    flattenAllCategories(cats, result = []) {
+        cats.forEach(cat => {
+            const name = cat.name || cat;
+            result.push(name);
+            if (cat.children && cat.children.length > 0) {
+                this.flattenAllCategories(cat.children, result);
+            }
+        });
+        return result;
     }
 
     createTagElement(displayText, value) {
