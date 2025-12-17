@@ -150,83 +150,82 @@ class NegativeFloor {
     renderTags(categories) {
         this.tagContainer.innerHTML = '';
         
-        // "全部" 按钮
-        const allTagEl = this.createTagElement('全部', 'all', 'nf-tag-all');
-        this.tagContainer.appendChild(allTagEl);
+        // 全部按钮
+        const allTag = this.createTagElement('全部', 'all');
+        allTag.classList.add('nf-tag-primary');
+        this.tagContainer.appendChild(allTag);
         
-        // 渲染每个一级分类
+        // 遍历一级分类
         categories.forEach(cat => {
             if (typeof cat === 'string') {
-                const tagEl = this.createTagElement(cat, cat, 'nf-tag-l1');
-                this.tagContainer.appendChild(tagEl);
+                this.tagContainer.appendChild(this.createTagElement(cat, cat));
                 return;
             }
             
-            const group = document.createElement('div');
-            group.className = 'nf-group';
+            // 一级分类区块
+            const section = document.createElement('div');
+            section.className = 'nf-section';
             
-            // 一级分类标题（大标题，可点击）
-            const title = document.createElement('div');
-            title.className = 'nf-title-l1';
-            title.textContent = cat.name;
-            title.onclick = () => this.selectTag(cat.name);
-            if (this.gallery.tagFilter?.currentTag === cat.name) {
-                title.classList.add('active');
-            }
-            group.appendChild(title);
+            // 一级标题
+            const h1 = document.createElement('div');
+            h1.className = 'nf-h1';
+            h1.textContent = cat.name;
+            h1.onclick = () => this.selectTag(cat.name);
+            if (this.gallery.tagFilter?.currentTag === cat.name) h1.classList.add('active');
+            section.appendChild(h1);
             
-            // 渲染二级分类
+            // 二级分类
             if (cat.children && cat.children.length > 0) {
-                const l2Container = document.createElement('div');
-                l2Container.className = 'nf-level2-container';
+                const list = document.createElement('div');
+                list.className = 'nf-list';
                 
                 cat.children.forEach(l2 => {
                     const l2Name = l2.name || l2;
                     const hasL3 = l2.children && l2.children.length > 0;
                     
-                    // 二级分类组
-                    const l2Group = document.createElement('div');
-                    l2Group.className = 'nf-l2-group';
+                    // 二级项
+                    const item = document.createElement('div');
+                    item.className = 'nf-item';
                     
-                    // 二级分类标签（统一样式）
-                    const l2Tag = this.createTagElement(l2Name, l2Name, 'nf-tag-l2');
-                    l2Group.appendChild(l2Tag);
+                    // 二级标题
+                    const h2 = document.createElement('div');
+                    h2.className = 'nf-h2';
+                    h2.textContent = l2Name;
+                    h2.onclick = () => this.selectTag(l2Name);
+                    if (this.gallery.tagFilter?.currentTag === l2Name) h2.classList.add('active');
+                    item.appendChild(h2);
                     
-                    // 如果有三级分类，显示在下方
+                    // 三级标签
                     if (hasL3) {
-                        const l3Container = document.createElement('div');
-                        l3Container.className = 'nf-level3-container';
-                        this.renderLevel3Plus(l2.children, l3Container);
-                        l2Group.appendChild(l3Container);
+                        const tags = document.createElement('div');
+                        tags.className = 'nf-tags';
+                        this.renderDeepTags(l2.children, tags);
+                        item.appendChild(tags);
                     }
                     
-                    l2Container.appendChild(l2Group);
+                    list.appendChild(item);
                 });
                 
-                group.appendChild(l2Container);
+                section.appendChild(list);
             }
             
-            this.tagContainer.appendChild(group);
+            this.tagContainer.appendChild(section);
         });
     }
     
-    // 渲染三级及更深层级（扁平化为小标签）
-    renderLevel3Plus(children, container) {
+    renderDeepTags(children, container) {
         children.forEach(child => {
             const name = child.name || child;
-            const tagEl = this.createTagElement(name, name, 'nf-tag-l3');
-            container.appendChild(tagEl);
-            
-            // 递归渲染更深层级
-            if (child.children && child.children.length > 0) {
-                this.renderLevel3Plus(child.children, container);
-            }
+            const tag = this.createTagElement(name, name);
+            tag.classList.add('nf-tag-small');
+            container.appendChild(tag);
+            if (child.children?.length) this.renderDeepTags(child.children, container);
         });
     }
 
-    createTagElement(displayText, value, extraClass = '') {
+    createTagElement(displayText, value) {
         const tagEl = document.createElement('div');
-        tagEl.className = 'nf-tag' + (extraClass ? ' ' + extraClass : '');
+        tagEl.className = 'nf-tag';
         tagEl.textContent = displayText;
         
         // Check if active

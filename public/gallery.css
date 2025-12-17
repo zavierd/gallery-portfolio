@@ -112,87 +112,72 @@
   border-color: var(--text-color);
 }
 
-/* Negative Floor Groups */
-.nf-group {
+/* 一级分类区块 */
+.nf-section {
   width: 100%;
-  margin-bottom: 28px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 24px;
 }
 
-.nf-group:last-child {
-  border-bottom: none;
-}
-
-/* 一级分类标题 - 最大 */
-.nf-title-l1 {
-  font-size: 18px;
-  font-weight: 700;
+/* 一级标题 */
+.nf-h1 {
+  font-size: 16px;
+  font-weight: 600;
   color: var(--text-color);
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   cursor: pointer;
-  transition: opacity 0.2s;
 }
 
-.nf-title-l1:hover {
-  opacity: 0.7;
-}
+.nf-h1:hover { opacity: 0.7; }
+.nf-h1.active { color: var(--primary-color); }
 
-.nf-title-l1.active {
-  color: var(--primary-color);
-}
-
-/* 二级分类容器 */
-.nf-level2-container {
+/* 二级列表 */
+.nf-list {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 12px;
-  align-items: flex-start;
+  padding-left: 16px;
+  border-left: 2px solid var(--border-color);
 }
 
-/* 二级分类组 */
-.nf-l2-group {
+/* 二级项 */
+.nf-item {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-/* 三级分类容器 */
-.nf-level3-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding-left: 12px;
-  margin-top: 4px;
+/* 二级标题 */
+.nf-h2 {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color);
+  cursor: pointer;
 }
 
-/* 全部按钮 - 特殊样式 */
-.nf-tag-all {
+.nf-h2:hover { opacity: 0.7; }
+.nf-h2.active { color: var(--primary-color); }
+
+/* 三级标签容器 */
+.nf-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-left: 12px;
+}
+
+/* 全部按钮 */
+.nf-tag-primary {
   background-color: var(--text-color);
   color: var(--bg-color);
   border-color: var(--text-color);
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
-.nf-tag-all.active {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-}
-
-/* 二级标签 - 中等大小 */
-.nf-tag-l2 {
-  height: 36px;
-  padding: 0 18px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-/* 三级标签 - 小尺寸 */
-.nf-tag-l3 {
+/* 小标签 */
+.nf-tag-small {
   height: 28px;
   padding: 0 12px;
   font-size: 12px;
-  background-color: var(--bg-color);
 }
 
 /* Gallery Layout */
