@@ -150,37 +150,20 @@
   align-items: flex-start;
 }
 
-/* 二级分类组（有子分类时） */
+/* 二级分类组 */
 .nf-l2-group {
-  width: 100%;
-  margin-top: 8px;
-  padding-left: 16px;
-  border-left: 3px solid var(--border-color);
-}
-
-/* 二级分类标题 - 中等 */
-.nf-title-l2 {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  margin-bottom: 10px;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.nf-title-l2:hover {
-  color: var(--text-color);
-}
-
-.nf-title-l2.active {
-  color: var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 /* 三级分类容器 */
 .nf-level3-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
+  padding-left: 12px;
+  margin-top: 4px;
 }
 
 /* 全部按钮 - 特殊样式 */

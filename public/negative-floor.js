@@ -184,32 +184,23 @@ class NegativeFloor {
                     const l2Name = l2.name || l2;
                     const hasL3 = l2.children && l2.children.length > 0;
                     
+                    // 二级分类组
+                    const l2Group = document.createElement('div');
+                    l2Group.className = 'nf-l2-group';
+                    
+                    // 二级分类标签（统一样式）
+                    const l2Tag = this.createTagElement(l2Name, l2Name, 'nf-tag-l2');
+                    l2Group.appendChild(l2Tag);
+                    
+                    // 如果有三级分类，显示在下方
                     if (hasL3) {
-                        // 二级有子分类：显示为中标题 + 三级标签
-                        const l2Group = document.createElement('div');
-                        l2Group.className = 'nf-l2-group';
-                        
-                        const l2Title = document.createElement('div');
-                        l2Title.className = 'nf-title-l2';
-                        l2Title.textContent = l2Name;
-                        l2Title.onclick = () => this.selectTag(l2Name);
-                        if (this.gallery.tagFilter?.currentTag === l2Name) {
-                            l2Title.classList.add('active');
-                        }
-                        l2Group.appendChild(l2Title);
-                        
-                        // 三级及更深层级
                         const l3Container = document.createElement('div');
                         l3Container.className = 'nf-level3-container';
                         this.renderLevel3Plus(l2.children, l3Container);
                         l2Group.appendChild(l3Container);
-                        
-                        l2Container.appendChild(l2Group);
-                    } else {
-                        // 二级无子分类：显示为中等标签
-                        const tagEl = this.createTagElement(l2Name, l2Name, 'nf-tag-l2');
-                        l2Container.appendChild(tagEl);
                     }
+                    
+                    l2Container.appendChild(l2Group);
                 });
                 
                 group.appendChild(l2Container);
