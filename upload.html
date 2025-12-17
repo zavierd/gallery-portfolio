@@ -450,6 +450,7 @@
         <select id="categoryFilter" onchange="loadGallery()"></select>
         <div class="count-badge" id="imageCount">0 项</div>
         <div style="flex:1"></div>
+        <button class="btn btn-small" onclick="selectAll()" id="selectAllBtn">全选</button>
         <button class="btn btn-small" onclick="loadGallery()">刷新列表</button>
       </div>
       
@@ -738,9 +739,31 @@
       const count = selectedImages.size;
       document.getElementById('selectedCount').textContent = `已选择 ${count} 项`;
       document.getElementById('batchActions').classList.toggle('show', count > 0);
+      updateSelectAllBtn();
     }
 
-    function clearSelection() { selectedImages.clear(); updateSelection(); }
+    function clearSelection() { selectedImages.clear(); updateSelection(); updateSelectAllBtn(); }
+    
+    function selectAll() {
+      if (selectedImages.size === galleryImages.length) {
+        // 如果已全选，则取消全选
+        selectedImages.clear();
+      } else {
+        // 全选所有图片
+        galleryImages.forEach(img => selectedImages.add(img.original));
+      }
+      updateSelection();
+      updateSelectAllBtn();
+    }
+    
+    function updateSelectAllBtn() {
+      const btn = document.getElementById('selectAllBtn');
+      if (selectedImages.size === galleryImages.length && galleryImages.length > 0) {
+        btn.textContent = '取消全选';
+      } else {
+        btn.textContent = '全选';
+      }
+    }
     function viewImage(url) { document.getElementById('modalImage').src = url; document.getElementById('imageModal').classList.add('show'); }
     function closeModal() { document.getElementById('imageModal').classList.remove('show'); }
 
