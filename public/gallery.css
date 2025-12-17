@@ -115,87 +115,101 @@
 /* Negative Floor Groups */
 .nf-group {
   width: 100%;
-  margin-bottom: 24px;
-}
-
-.nf-group-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-color);
-  margin-bottom: 12px;
-  padding-left: 4px;
-  cursor: pointer;
-  display: inline-block;
-  transition: opacity 0.2s;
-}
-
-.nf-group-title:hover {
-  opacity: 0.7;
-}
-
-.nf-group-title.active {
-  color: var(--primary-color);
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
-.nf-group-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-content: flex-start;
-}
-
-/* 全部按钮容器 */
-.nf-all-wrapper {
-  width: 100%;
-  margin-bottom: 20px;
-  padding-bottom: 16px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
   border-bottom: 1px solid var(--border-color);
 }
 
-/* 子分类容器 */
-.nf-children {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-top: 12px;
-  padding-left: 12px;
-  border-left: 2px solid var(--border-color);
+.nf-group:last-child {
+  border-bottom: none;
 }
 
-/* 二级分类组 */
-.nf-subgroup {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+/* 一级分类标题 - 最大 */
+.nf-title-l1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: opacity 0.2s;
 }
 
-/* 二级分类标题 */
-.nf-subgroup-title {
-  font-size: 13px;
-  font-weight: 500;
+.nf-title-l1:hover {
+  opacity: 0.7;
+}
+
+.nf-title-l1.active {
+  color: var(--primary-color);
+}
+
+/* 二级分类容器 */
+.nf-level2-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+/* 二级分类组（有子分类时） */
+.nf-l2-group {
+  width: 100%;
+  margin-top: 8px;
+  padding-left: 16px;
+  border-left: 3px solid var(--border-color);
+}
+
+/* 二级分类标题 - 中等 */
+.nf-title-l2 {
+  font-size: 14px;
+  font-weight: 600;
   color: var(--text-secondary);
+  margin-bottom: 10px;
   cursor: pointer;
   transition: color 0.2s;
-  padding: 4px 0;
 }
 
-.nf-subgroup-title:hover {
+.nf-title-l2:hover {
   color: var(--text-color);
 }
 
-.nf-subgroup-title.active {
+.nf-title-l2.active {
   color: var(--primary-color);
-  font-weight: 600;
 }
 
-/* 二级分类下的标签 */
-.nf-subgroup-tags {
+/* 三级分类容器 */
+.nf-level3-container {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  padding-left: 8px;
+}
+
+/* 全部按钮 - 特殊样式 */
+.nf-tag-all {
+  background-color: var(--text-color);
+  color: var(--bg-color);
+  border-color: var(--text-color);
+  margin-bottom: 20px;
+}
+
+.nf-tag-all.active {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* 二级标签 - 中等大小 */
+.nf-tag-l2 {
+  height: 36px;
+  padding: 0 18px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 三级标签 - 小尺寸 */
+.nf-tag-l3 {
+  height: 28px;
+  padding: 0 12px;
+  font-size: 12px;
+  background-color: var(--bg-color);
 }
 
 /* Gallery Layout */
