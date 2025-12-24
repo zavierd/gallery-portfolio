@@ -426,9 +426,9 @@ class ImageLoader {
             img.imgClickHandler = imgClickHandler;
         };
         
-        // 并行加载多张图片（提升速度）
+        // 并行加载图片（限制并发数，按需加载）
         this.isScrollLoading = true;
-        const CONCURRENT_LOADS = 36; // 同时加载36张
+        const CONCURRENT_LOADS = Math.min(12, remainingToLoad); // 最多同时加载12张
         for (let i = 0; i < CONCURRENT_LOADS && this.currentIndex + i < images.length; i++) {
             loadSingleImage(this.currentIndex + i);
         }
