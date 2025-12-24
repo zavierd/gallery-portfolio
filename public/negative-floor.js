@@ -26,6 +26,14 @@ class NegativeFloor {
         window.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
         window.addEventListener('touchend', (e) => this.handleTouchEnd(e));
         
+        // 阻止负一楼内的触摸事件冒泡到瀑布流
+        this.container.addEventListener('touchstart', (e) => {
+            if (this.isOpen) e.stopPropagation();
+        }, { passive: true });
+        this.container.addEventListener('touchmove', (e) => {
+            if (this.isOpen) e.stopPropagation();
+        }, { passive: true });
+        
         // Search functionality
         this.searchInput.addEventListener('input', (e) => this.handleSearch(e.target.value));
         
@@ -48,37 +56,26 @@ class NegativeFloor {
         }
         
         // Scenario 2: Closing (Pull Up)
-        // Only trigger if already open
-        // CRITICAL: Only allow closing via dragging the HEADER or empty space, 
-        // to prevent conflict with scrolling the tag list and clicking tags/inputs.
         if (this.isOpen) {
-             const isHeader = target.closest('.nf-header');
-             const isInput = target.tagName === 'INPUT';
-             const isCloseBtn = target.closest('#nf-close-btn');
-             
-             // Also allow if we are at the very top of scroll content and pulling up? 
-             // No, that's where conflict happens. 
-             // Let's restrict to Header for "Pull Up to Close" to ensure content is interactive.
-             
-             // IMPORTANT: Exclude input and buttons from drag start to allow focus/click
-             if (isHeader && !isInput && !isCloseBtn) {
-                 this.startY = y;
-                 this.isDragging = true;
-                 this.dragMode = 'close';
-             }
+            const isInput = target.tagName === 'INPUT';
+            const isCloseBtn = target.closest('#nf-close-btn');
+            
+            if (!isInput && !isCloseBtn) {
+                this.startY = y;
+                this.isDragging = false; // 不立即开始拖动，等待判断
+                this.dragMode = 'close';
+                this.scrollStartY = this.tagContainer.scrollTop;
+            }
         }
     }
 
     handleTouchMove(e) {
-        if (!this.isDragging) return;
-        
         const y = e.touches[0].clientY;
         const diff = y - this.startY;
         
         // Handling Opening (Pull Down)
-        if (this.dragMode === 'open') {
+        if (this.dragMode === 'open' && this.isDragging) {
             if (diff > 0) {
-                // Add resistance
                 this.currentY = Math.pow(diff, 0.8);
                 if (e.cancelable) e.preventDefault();
                 this.updatePosition(this.currentY - this.container.offsetHeight);
@@ -87,28 +84,39 @@ class NegativeFloor {
         
         // Handling Closing (Pull Up)
         if (this.dragMode === 'close') {
+            const scrollTop = this.tagContainer.scrollTop;
+            const scrollHeight = this.tagContainer.scrollHeight;
+            const clientHeight = this.tagContainer.clientHeight;
+            const isAtBottom = scrollTop + clientHeight >= scrollHeight - 5;
+            
+            // 上滑（diff < 0）
             if (diff < 0) {
-                 // No resistance needed for closing usually, or maybe slight
-                 this.currentY = diff; // Negative value
-                 if (e.cancelable) e.preventDefault();
-                 // We translate from 0 to negative
-                 this.updatePosition(this.currentY);
+                // 如果已经在底部，开始拖动关闭
+                if (isAtBottom) {
+                    if (!this.isDragging) {
+                        this.isDragging = true;
+                        this.startY = y; // 重置起始点
+                        this.currentY = 0;
+                    } else {
+                        this.currentY = y - this.startY;
+                        if (e.cancelable) e.preventDefault();
+                        this.updatePosition(this.currentY);
+                    }
+                }
+                // 否则让内容正常滚动
             }
+            // 下滑（diff > 0）时不干预，让内容正常滚动
         }
     }
 
     handleTouchEnd(e) {
-        if (!this.isDragging) return;
-        this.isDragging = false;
-        
-        if (this.dragMode === 'open') {
+        if (this.dragMode === 'open' && this.isDragging) {
             if (this.currentY > this.threshold) {
                 this.open();
             } else {
                 this.close();
             }
-        } else if (this.dragMode === 'close') {
-            // If pulled up enough (negative value), close it
+        } else if (this.dragMode === 'close' && this.isDragging) {
             if (this.currentY < -this.threshold) {
                 this.close();
             } else {
@@ -116,6 +124,7 @@ class NegativeFloor {
             }
         }
         
+        this.isDragging = false;
         this.currentY = 0;
         this.dragMode = null;
     }
