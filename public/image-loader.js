@@ -290,9 +290,6 @@ class ImageLoader {
             if (index >= images.length || remainingToLoad <= 0) {
                 if (!isInitialLoad) {
                     this.hideLoadingMessage();
-                } else {
-                    // 显示 gallery（loading 已在数据加载完成时隐藏）
-                    this.galleryElement.style.opacity = '1';
                 }
                 
                 if (index >= images.length) {
@@ -368,6 +365,13 @@ class ImageLoader {
                     setTimeout(() => {
                         img.classList.add('loaded');
                     }, 10);
+                    
+                    // 第一张图片加载完成，隐藏全局 loading
+                    if (this.imagesLoadedCount === 0) {
+                        const globalLoader = document.getElementById('loading');
+                        if (globalLoader) globalLoader.classList.add('hidden');
+                        this.galleryElement.style.opacity = '1';
+                    }
                     
                     // 更新计数
                     this.currentIndex++;
