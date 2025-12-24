@@ -5,7 +5,7 @@ export async function onRequestPost(context) {
     const formData = await request.formData();
     const file = formData.get('file');
     const category = formData.get('category');
-    const generatePreview = formData.get('generatePreview') === 'true';
+    const preview = formData.get('preview'); // 前端生成的压缩预览图
 
     if (!file || !category) {
       return new Response(JSON.stringify({ error: '缺少文件或分类' }), {
@@ -15,7 +15,6 @@ export async function onRequestPost(context) {
     }
 
     const fileName = file.name;
-    const fileExt = fileName.split('.').pop().toLowerCase();
     const baseName = fileName.substring(0, fileName.lastIndexOf('.'));
     const contentType = file.type || 'image/jpeg';
 
@@ -27,20 +26,16 @@ export async function onRequestPost(context) {
       httpMetadata: { contentType }
     });
 
-    // 生成并上传预览图
-    if (generatePreview) {
+    // 上传压缩预览图（前端生成的400px WebP）
+    if (preview) {
       try {
-        // 使用 Cloudflare Image Resizing 生成预览图
-        // 注意：这需要在 Cloudflare 账户中启用 Image Resizing 功能
-        // 如果没有启用，预览图将使用原图
         const previewKey = `0_preview/${category}/${baseName}.webp`;
-        
-        // 简单方案：直接存储原图作为预览（实际项目中可以用 Workers 处理图片）
-        await env.R2_BUCKET.put(previewKey, fileBuffer, {
+        const previewBuffer = await preview.arrayBuffer();
+        await env.R2_BUCKET.put(previewKey, previewBuffer, {
           httpMetadata: { contentType: 'image/webp' }
         });
       } catch (e) {
-        console.error('生成预览图失败:', e);
+        console.error('上传预览图失败:', e);
       }
     }
 
