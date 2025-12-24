@@ -764,29 +764,38 @@ class ImageLoader {
             `;
         };
         
-        // 检查当前模态窗口是否已经显示的是原图
-        const isCurrentlyShowingOriginal = modalImg.src && modalImg.src.includes(original);
-        
-        // 显示预览图（如果当前不是原图）
-        if (!isCurrentlyShowingOriginal) {
-            console.log(`设置模态窗口预览图: ${preview}`);
-            modalImg.src = preview;
-            modalImg.style.filter = 'none';
-            modalImg.style.transition = 'filter 0.3s ease';
-        }
-        
-        // 保存原图URL，用于后续加载
+        // 保存原图URL
         this.currentOriginalUrl = original;
         this.isModalOpen = true;
         
-        // 判断是否显示加载原图按钮
+        // 隐藏查看原图按钮（因为直接显示原图）
         const loadOriginalBtn = document.getElementById('load-original-btn');
-        // 如果当前显示的是原图，或者预览图URL与原图URL相同，不显示按钮
-        if (isCurrentlyShowingOriginal || preview === original) {
-            loadOriginalBtn.style.display = 'none';
-        } else {
-            loadOriginalBtn.style.display = 'flex';
-        }
+        loadOriginalBtn.style.display = 'none';
+        
+        // 显示加载动画
+        const modalLoading = document.getElementById('modal-loading');
+        modalLoading.style.display = 'flex';
+        
+        // 先显示预览图作为占位
+        modalImg.src = preview;
+        modalImg.style.filter = 'blur(5px)';
+        modalImg.style.transition = 'filter 0.3s ease';
+        
+        // 预加载原图
+        const originalImage = new Image();
+        originalImage.onload = () => {
+            if (this.isModalOpen && this.currentOriginalUrl === original) {
+                modalImg.src = original;
+                modalImg.style.filter = 'none';
+                modalLoading.style.display = 'none';
+            }
+        };
+        originalImage.onerror = () => {
+            console.error('原图加载失败:', original);
+            modalLoading.style.display = 'none';
+            modalImg.style.filter = 'none';
+        };
+        originalImage.src = original;
         
         // 获取EXIF信息
         this.getExifInfo(original).then(exifData => {
@@ -954,27 +963,30 @@ class ImageLoader {
         if (loader) loader.style.display = 'flex';
         modalImg.style.opacity = '0';
 
-        // Load new image
-        modalImg.onload = () => {
-             modalImg.style.opacity = '1';
-             if (loader) loader.style.display = 'none';
-             modalImg.onload = null;
-        };
-        modalImg.onerror = () => {
-             modalImg.style.opacity = '1';
-             if (loader) loader.style.display = 'none';
-             modalImg.onerror = null;
-        };
-        
-        // Show preview first
-        modalImg.src = imageData.preview;
-        modalImg.style.filter = 'none'; // Reset any filter
+        // 隐藏查看原图按钮
+        loadOriginalBtn.style.display = 'none';
         this.currentOriginalUrl = imageData.original;
         
-        // Reset download button state
-        loadOriginalBtn.style.display = 'flex';
-        loadOriginalBtn.innerHTML = '查看原图';
-        loadOriginalBtn.classList.remove('loading');
+        // 先显示模糊的预览图
+        modalImg.src = imageData.preview;
+        modalImg.style.filter = 'blur(5px)';
+        modalImg.style.opacity = '1';
+        
+        // 预加载原图
+        const originalImage = new Image();
+        originalImage.onload = () => {
+            if (this.isModalOpen && this.currentModalIndex === index) {
+                modalImg.src = imageData.original;
+                modalImg.style.filter = 'none';
+                if (loader) loader.style.display = 'none';
+            }
+        };
+        originalImage.onerror = () => {
+            console.error('原图加载失败:', imageData.original);
+            if (loader) loader.style.display = 'none';
+            modalImg.style.filter = 'none';
+        };
+        originalImage.src = imageData.original;
         
         // Load EXIF for new image
         exifInfo.innerHTML = ''; // Clear old EXIF
