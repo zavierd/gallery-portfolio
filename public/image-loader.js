@@ -973,7 +973,7 @@ class ImageLoader {
         
         // Reset download button state
         loadOriginalBtn.style.display = 'flex';
-        loadOriginalBtn.innerHTML = '下载原图';
+        loadOriginalBtn.innerHTML = '查看原图';
         loadOriginalBtn.classList.remove('loading');
         
         // Load EXIF for new image
