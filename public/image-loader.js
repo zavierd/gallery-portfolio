@@ -428,7 +428,7 @@ class ImageLoader {
         
         // 并行加载多张图片（提升速度）
         this.isScrollLoading = true;
-        const CONCURRENT_LOADS = 6; // 同时加载6张
+        const CONCURRENT_LOADS = 36; // 同时加载36张
         for (let i = 0; i < CONCURRENT_LOADS && this.currentIndex + i < images.length; i++) {
             loadSingleImage(this.currentIndex + i);
         }
