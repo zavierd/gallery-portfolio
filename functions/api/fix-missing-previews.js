@@ -4,8 +4,7 @@ export async function onRequestPost(context) {
 
   try {
     const missing = [
-      { key: "宁波慈溪/11.jpg", preview: "0_preview/宁波慈溪/11.webp" },
-      { key: "上海亚太旗舰店/DSC05939-编辑 [原始大小].jpg", preview: "0_preview/上海亚太旗舰店/DSC05939-编辑 [原始大小].webp" }
+      { key: "重庆旗舰店/DSC02370-编辑.jpg", preview: "0_preview/重庆旗舰店/DSC02370-编辑.webp" }
     ];
 
     const results = [];
