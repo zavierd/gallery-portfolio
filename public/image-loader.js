@@ -291,9 +291,7 @@ class ImageLoader {
                 if (!isInitialLoad) {
                     this.hideLoadingMessage();
                 } else {
-                    // Hide global loader and show gallery on first batch done
-                    const globalLoader = document.getElementById('loading');
-                    if (globalLoader) globalLoader.classList.add('hidden');
+                    // 显示 gallery（loading 已在数据加载完成时隐藏）
                     this.galleryElement.style.opacity = '1';
                 }
                 

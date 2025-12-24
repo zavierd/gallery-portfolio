@@ -25,6 +25,10 @@ class Gallery {
 
         // 加载图片数据
         await this.dataLoader.loadGalleryData();
+        
+        // 数据加载完成，隐藏全局 loading
+        const globalLoader = document.getElementById('loading');
+        if (globalLoader) globalLoader.classList.add('hidden');
 
         // 初始化组件（包括 tagFilter）
         this.initComponents();
