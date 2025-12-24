@@ -426,9 +426,12 @@ class ImageLoader {
             img.imgClickHandler = imgClickHandler;
         };
         
-        // 开始加载第一张图片
+        // 并行加载多张图片（提升速度）
         this.isScrollLoading = true;
-        loadSingleImage(this.currentIndex);
+        const CONCURRENT_LOADS = 6; // 同时加载6张
+        for (let i = 0; i < CONCURRENT_LOADS && this.currentIndex + i < images.length; i++) {
+            loadSingleImage(this.currentIndex + i);
+        }
     }
 
     // 显示加载消息
