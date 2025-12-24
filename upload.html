@@ -859,17 +859,22 @@
       
       for (let i = 0; i < galleryImages.length; i++) {
         const img = galleryImages[i];
-        showManageMessage(`优化中: ${i + 1}/${total}`, 'success', 0);
+        showManageMessage(`优化中: ${i + 1}/${total} (成功${success}/失败${failed})`, 'success', 0);
         
         try {
-          // 加载原图
-          const response = await fetch(img.original);
+          // 加载原图（带超时）
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 30000);
+          const response = await fetch(img.original, { signal: controller.signal });
+          clearTimeout(timeout);
           const blob = await response.blob();
           
-          // 生成压缩预览图
-          const previewBlob = await new Promise((resolve) => {
+          // 生成压缩预览图（带超时和错误处理）
+          const previewBlob = await new Promise((resolve, reject) => {
+            const timer = setTimeout(() => reject(new Error('图片处理超时')), 15000);
             const imgEl = new Image();
             imgEl.onload = () => {
+              clearTimeout(timer);
               const canvas = document.createElement('canvas');
               let w = imgEl.width, h = imgEl.height;
               const maxSize = 400;
@@ -879,8 +884,10 @@
               }
               canvas.width = w; canvas.height = h;
               canvas.getContext('2d').drawImage(imgEl, 0, 0, w, h);
-              canvas.toBlob(resolve, 'image/webp', 0.6);
+              canvas.toBlob(b => b ? resolve(b) : reject(new Error('toBlob失败')), 'image/webp', 0.6);
+              URL.revokeObjectURL(imgEl.src);
             };
+            imgEl.onerror = () => { clearTimeout(timer); reject(new Error('图片加载失败')); };
             imgEl.src = URL.createObjectURL(blob);
           });
           
