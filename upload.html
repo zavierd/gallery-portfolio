@@ -849,20 +849,75 @@
 
     // 批量优化预览图
     async function optimizePreviews() {
-      if (!confirm('将为所有图片重新生成压缩预览图（400px, WebP），这可能需要几分钟。继续？')) return;
-      
       const btn = document.getElementById('optimizeBtn');
       btn.disabled = true;
+      btn.textContent = '检查中...';
+      
+      // 先获取未压缩的图片列表
+      let needProcess = [];
+      try {
+        const res = await fetch('/api/check-sizes');
+        const data = await res.json();
+        if (data.notCompressed === 0) {
+          btn.disabled = false;
+          btn.textContent = '优化预览图';
+          showManageMessage('所有图片已优化，无需处理', 'success');
+          return;
+        }
+        // 获取未压缩图片的 key 列表
+        needProcess = data.samples.map(s => s.original);
+        // 如果未压缩数量大于 samples，需要获取完整列表
+        if (data.notCompressed > data.samples.length) {
+          // 从 galleryImages 中筛选
+          const sampleSet = new Set(data.samples.map(s => s.original));
+          needProcess = galleryImages.filter(img => {
+            const ext = img.original.split('.').pop();
+            const key = `${img.category}/${img.name}.${ext}`;
+            return sampleSet.has(key) || data.notCompressed > 10;
+          });
+        } else {
+          // 转换为 galleryImages 格式
+          needProcess = data.samples.map(s => {
+            const parts = s.original.split('/');
+            const category = parts[0];
+            const fileName = parts.slice(1).join('/');
+            const name = fileName.substring(0, fileName.lastIndexOf('.'));
+            return galleryImages.find(img => img.category === category && img.name === name);
+          }).filter(Boolean);
+        }
+        
+        if (needProcess.length === 0) {
+          btn.disabled = false;
+          btn.textContent = '优化预览图';
+          showManageMessage('所有图片已优化，无需处理', 'success');
+          return;
+        }
+        
+        if (!confirm(`发现 ${data.notCompressed} 张图片需要优化预览图，是否开始处理？`)) {
+          btn.disabled = false;
+          btn.textContent = '优化预览图';
+          return;
+        }
+      } catch (e) {
+        console.error('检查失败:', e);
+        if (!confirm('无法检查状态，是否处理所有图片？')) {
+          btn.disabled = false;
+          btn.textContent = '优化预览图';
+          return;
+        }
+        needProcess = galleryImages;
+      }
+      
       btn.textContent = '处理中...';
+      let success = 0, failed = 0, skipped = 0, total = needProcess.length;
       
-      let success = 0, failed = 0, total = galleryImages.length;
-      
-      for (let i = 0; i < galleryImages.length; i++) {
-        const img = galleryImages[i];
+      for (let i = 0; i < needProcess.length; i++) {
+        const img = needProcess[i];
+        if (!img) { skipped++; continue; }
         showManageMessage(`优化中: ${i + 1}/${total} (成功${success}/失败${failed})`, 'success', 0);
         
         try {
-          // 通过代理加载原图（解决CORS问题）
+          // 通过代理加载原图
           const ext = img.original.split('.').pop();
           const imageKey = `${img.category}/${img.name}.${ext}`;
           const controller = new AbortController();
@@ -872,7 +927,7 @@
           if (!response.ok) throw new Error('图片加载失败');
           const blob = await response.blob();
           
-          // 生成压缩预览图（带超时和错误处理）
+          // 生成压缩预览图
           const previewBlob = await new Promise((resolve, reject) => {
             const timer = setTimeout(() => reject(new Error('图片处理超时')), 15000);
             const imgEl = new Image();
