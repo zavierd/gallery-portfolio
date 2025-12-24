@@ -275,8 +275,8 @@ class ImageLoader {
         // 计算当前已加载的图片数量
         const loadedImagesCount = document.querySelectorAll('.gallery img').length;
         
-        // 计算还需要加载多少图片
-        let remainingToLoad = Math.max(imagesPerRow, maxImagesToLoad - loadedImagesCount);
+        // 计算还需要加载多少图片（至少36张）
+        let remainingToLoad = Math.max(36, imagesPerRow, maxImagesToLoad - loadedImagesCount);
         
         console.log(`准备加载图片: 屏幕=${viewportWidth}x${viewportHeight}, 列数=${imagesPerRow}, 平均高度=${avgImageHeight}, 当前已加载=${loadedImagesCount}, 目标总数=${maxImagesToLoad}, 还需加载=${remainingToLoad}`);
         
