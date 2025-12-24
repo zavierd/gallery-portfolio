@@ -75,7 +75,7 @@ export async function onRequestGet(context) {
     return new Response(JSON.stringify(result), {
       headers: {
         'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache'
+        'Cache-Control': 'public, max-age=300, s-maxage=300' // 缓存5分钟
       }
     });
 
