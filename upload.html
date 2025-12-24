@@ -862,11 +862,14 @@
         showManageMessage(`优化中: ${i + 1}/${total} (成功${success}/失败${failed})`, 'success', 0);
         
         try {
-          // 加载原图（带超时）
+          // 通过代理加载原图（解决CORS问题）
+          const ext = img.original.split('.').pop();
+          const imageKey = `${img.category}/${img.name}.${ext}`;
           const controller = new AbortController();
           const timeout = setTimeout(() => controller.abort(), 30000);
-          const response = await fetch(img.original, { signal: controller.signal });
+          const response = await fetch(`/api/proxy-image?key=${encodeURIComponent(imageKey)}`, { signal: controller.signal });
           clearTimeout(timeout);
+          if (!response.ok) throw new Error('图片加载失败');
           const blob = await response.blob();
           
           // 生成压缩预览图（带超时和错误处理）
